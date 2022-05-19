@@ -12,7 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
+/bin
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -26,8 +26,10 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
+nb-configuration.xml
 !**/src/main/**/build/
 !**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+*.env
