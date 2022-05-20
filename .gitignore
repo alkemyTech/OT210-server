@@ -33,3 +33,4 @@ nb-configuration.xml
 ### VS Code ###
 .vscode/
 *.env
+src/main/resources/application.properties
