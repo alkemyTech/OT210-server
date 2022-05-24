@@ -48,6 +48,11 @@ public class Organization implements Auditable {
     @Column(name = "about_us_text")
     private String aboutUsText;
 
+    @OneToMany(mappedBy = "organizationId")
+    @Column(name = "slides_id")
+    @ToString.Exclude
+    private Set<Slides> slides;
+
     @Embedded
     private Audit audit;
 
