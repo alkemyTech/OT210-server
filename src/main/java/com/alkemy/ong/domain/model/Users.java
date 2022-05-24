@@ -1,6 +1,5 @@
 package com.alkemy.ong.domain.model;
 
-import com.alkemy.ong.domain.model.enumerator.ERole;
 import com.alkemy.ong.domain.model.audit.Audit;
 import com.alkemy.ong.domain.model.audit.AuditListener;
 import com.alkemy.ong.domain.model.audit.Auditable;
@@ -44,9 +43,10 @@ public class Users implements Auditable {
     @Column(name = "photo")
     private String photo;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private ERole role;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @ToString.Exclude
+    private Roles role;
 
     @Embedded
     private Audit audit;
