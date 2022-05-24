@@ -31,7 +31,7 @@ public class Roles implements Auditable {
     @Column(name = "name", nullable = false, updatable = false)
     private String name;
 
-    @Column(name = "description", nullable = false, updatable = false)
+    @Column(name = "description")
     private String description;
 
     @Embedded
