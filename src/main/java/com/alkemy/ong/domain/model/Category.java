@@ -37,7 +37,7 @@ public class Category implements Auditable {
 
     @Column
     private String image;
-    
+
     @Embedded
     private Audit audit;
 
