@@ -12,6 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Objects;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,13 +32,12 @@ public class Category implements Auditable {
     @Column(nullable = false)
     private String name;
 
-
     @Column
     private String description;
 
     @Column
     private String image;
-
+    
     @Embedded
     private Audit audit;
 
