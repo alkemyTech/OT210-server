@@ -8,15 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -25,9 +23,8 @@ import java.util.Set;
 @Where(clause = "is_active=true")
 @SQLDelete(sql = "UPDATE categories SET is_active=false WHERE category_id=?")
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 @EntityListeners(AuditListener.class)
-
 public class Category implements Auditable {
 
     @Id
@@ -38,23 +35,12 @@ public class Category implements Auditable {
     @Column(nullable = false)
     private String name;
 
-    @Column()
+    @Column
     private String description;
 
     @Column
     private String image;
 
-    @Column(name = "date_of_creation", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateOfCreation;
-
-    @Column(name = "modification_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime modificationDate;
-
-    @OneToMany(mappedBy = "categoryId")
-    @ToString.Exclude
-    private Set<New> aNew;
 
     @Embedded
     private Audit audit;
@@ -71,10 +57,5 @@ public class Category implements Auditable {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-
-
-
-
 
 }
