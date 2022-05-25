@@ -10,38 +10,30 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-@Entity(name = "activity")
+@Entity(name = "testimonial")
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE activity SET is_active=false WHERE activity_id=?")
+@SQLDelete(sql = "UPDATE testimonial SET is_active=false WHERE testimonial_id=?")
 @EntityListeners(AuditListener.class)
-public class Activity implements Auditable {
+public class Testimonial implements Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "activity_id")
+    @Column(name = "testimonial_id", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
-    private String content;
-
-    @Column(name = "image", nullable = false)
     private String image;
+
+    private String content;
 
     @Embedded
     private Audit audit;
@@ -50,8 +42,8 @@ public class Activity implements Auditable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Activity activity = (Activity) o;
-        return Objects.equals(id, activity.id);
+        Testimonial that = (Testimonial) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
