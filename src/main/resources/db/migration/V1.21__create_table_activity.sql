@@ -1,6 +1,6 @@
-drop table if exists activities;
+drop table if exists activity;
 
-create table activities
+create table activity
 (
     activity_id bigint       not null auto_increment,
     created_at  datetime(6)  not null,
