@@ -24,14 +24,14 @@ import java.util.Set;
 @Where(clause = "is_active=true")
 @SQLDelete(sql = "UPDATE news SET i@EntityListeners(AuditListener.class)s_active=false WHERE news_id=?")
 @Entity
-@Table(name = "news")
+@Table(name = "new")
 @EntityListeners(AuditListener.class)
 public class New implements Auditable  {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "news_id")
+    @Column(name = "new_id")
     private Long id;
 
     @Column(nullable = false)
@@ -42,20 +42,6 @@ public class New implements Auditable  {
 
     @Column(nullable = false)
     private String image;
-
-    @Column(name = "date_of_creation", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateOfCreation;
-
-    @Column(name = "modification_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime modificationDate;
-
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", insertable = false,nullable = false)
-    @ToString.Exclude
-    private Category categoryId;
 
     @Embedded
     private Audit audit;
@@ -72,10 +58,5 @@ public class New implements Auditable  {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-
-
-
-
 
 }
