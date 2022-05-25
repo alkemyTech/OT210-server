@@ -1,13 +1,11 @@
-drop table if exists categories;
+drop table if exists category;
 
-create table categories
+create table category
 (
     category_id  bigint not null auto_increment,
     name       varchar(255) not null,
     description varchar(255) null,
     image varchar(255) null,
-    date_of_creation datetime(6) not null,
-    modification_date datetime(6) not null,
     created_at datetime(6)  not null,
     is_active  bit          not null,
     updated_at datetime(6)  null,
