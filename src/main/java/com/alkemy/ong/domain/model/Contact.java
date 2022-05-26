@@ -7,6 +7,7 @@ import com.alkemy.ong.domain.model.audit.Auditable;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,10 +17,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "contacts")
+@Table(name = "contact")
 @EntityListeners(AuditListener.class)
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE contacts SET is_active=false where contact_id=?")
+@SQLDelete(sql = "UPDATE contacts SET is_active=false,delete_at=NOW() where contact_id=?")
 @Where(clause = "is_active=true")
 public class Contact implements Auditable {
 
@@ -40,6 +41,7 @@ public class Contact implements Auditable {
     private Audit audit;
 
     @Column(name = "deleted_at")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deletedAt;
 
     @Override
