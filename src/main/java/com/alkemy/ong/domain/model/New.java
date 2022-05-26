@@ -9,20 +9,16 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.format.annotation.DateTimeFormat;
-
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE news SET i@EntityListeners(AuditListener.class)s_active=false WHERE news_id=?")
+@SQLDelete(sql = "UPDATE new SET i@EntityListeners(AuditListener.class)s_active=false WHERE new_id=?")
 @Entity
 @Table(name = "new")
 @EntityListeners(AuditListener.class)
