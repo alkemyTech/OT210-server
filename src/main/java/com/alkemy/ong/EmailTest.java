@@ -1,7 +1,6 @@
 package com.alkemy.ong;
 
 import com.alkemy.ong.ports.output.email.EmailService;
-import com.sendgrid.helpers.mail.objects.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
