@@ -10,9 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -21,7 +19,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE categories SET is_active=false WHERE category_id=?")
+@SQLDelete(sql = "UPDATE category SET is_active=false WHERE category_id=?")
 @Entity
 @Table(name = "category")
 @EntityListeners(AuditListener.class)
