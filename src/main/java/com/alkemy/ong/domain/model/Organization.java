@@ -1,59 +1,67 @@
 package com.alkemy.ong.domain.model;
 
-
 import com.alkemy.ong.domain.model.audit.Audit;
 import com.alkemy.ong.domain.model.audit.AuditListener;
 import com.alkemy.ong.domain.model.audit.Auditable;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
-@ToString
+@Entity
+@Table(name = "organization")
 @Getter
 @Setter
-@Entity
-@Table(name = "contact")
-@EntityListeners(AuditListener.class)
+@ToString
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE contacts SET is_active=false, delete_at=current_timestamp() where contact_id=?")
 @Where(clause = "is_active=true")
-public class Contact implements Auditable {
+@SQLDelete(sql = "UPDATE organization SET is_active=false WHERE organization_id=?")
+@EntityListeners(AuditListener.class)
+public class Organization implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contact_id")
+    @Column(name = "organization_id")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String phone;
+    private String image;
 
-    private String message;
+    private String address;
+
+    private Integer phone;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(name = "welcome_text", nullable = false)
+    private String welcomeText;
+
+    @Column(name = "about_us_text")
+    private String aboutUsText;
 
     @Embedded
     private Audit audit;
-
-    @Column(name = "deleted_at")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime deletedAt;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Contact contact = (Contact) o;
-        return Objects.equals(id, contact.id);
+        Organization organization = (Organization) o;
+        return Objects.equals(id, organization.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
