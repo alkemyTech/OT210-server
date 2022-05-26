@@ -16,8 +16,9 @@ import java.io.IOException;
 @Service
 public class SendGridEmailService implements EmailService {
 
-    private final SendGrid sendGridClient;
+    private SendGrid sendGridClient;
 
+    @Autowired
     public SendGridEmailService(SendGrid sendGridClient) {
         this.sendGridClient = sendGridClient;
     }
@@ -29,13 +30,14 @@ public class SendGridEmailService implements EmailService {
 
     private Response sendEmail(String from, String to, String subject, Content content) {
         Mail mail = new Mail(new Email(from), subject, new Email(to), content);
-        mail.setReplyTo(new Email("${SG_EMAILFROM}"));
+        mail.setReplyTo(new Email(System.getenv("SG_EMAILFROM")));
         Request request = new Request();
-        Response response = null;
+        Response response = new Response();
         try {
             request.setMethod(Method.POST);
             request.setEndpoint("/mail/send");
             request.setBody(mail.build());
+//            response = sendGridClient.api(request);
             this.sendGridClient.api(request);
         }
         catch (IOException ex) {
@@ -47,7 +49,7 @@ public class SendGridEmailService implements EmailService {
     @Override
     public void sendHTML(String from, String to, String subject, String body) {
         Response response = sendEmail(from, to, subject, new Content("text/html", body));
-//        System.out.println("Status Code: " + response.getStatusCode() +
-//                ", Body: " + response.getBody() + ", Headers: " + response.getHeaders());
+        System.out.println("Status Code: " + response.getStatusCode() +
+                ", Body: " + response.getBody() + ", Headers: " + response.getHeaders());
     }
 }

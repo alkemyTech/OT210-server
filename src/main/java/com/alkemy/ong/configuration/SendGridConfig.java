@@ -10,7 +10,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.properties")
 public class SendGridConfig {
 
-    @Value("${email.sendgrid.apikey}") String sendGridAPIKey;
+    @Value("${email.sendgrid.apikey}")
+    String sendGridAPIKey;
 
     @Bean
     public SendGrid getSendGridAPIKey(){
