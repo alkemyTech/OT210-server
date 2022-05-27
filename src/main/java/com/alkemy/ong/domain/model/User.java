@@ -17,11 +17,11 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE users SET is_active=false WHERE user_id=?")
+@SQLDelete(sql = "UPDATE user SET is_active=false WHERE user_id=?")
 @EntityListeners(AuditListener.class)
-public class Users implements Auditable {
+public class User implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class Users implements Auditable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     @ToString.Exclude
-    private Roles role;
+    private Role role;
 
     @Embedded
     private Audit audit;
