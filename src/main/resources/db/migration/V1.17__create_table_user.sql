@@ -1,6 +1,6 @@
-drop table if exists users;
+drop table if exists user;
 
-create table users
+create table user
 (
     user_id bigint not null auto_increment,
     first_name varchar(25) not null,
@@ -13,5 +13,5 @@ create table users
     created_at datetime(6) not null,
     updated_at datetime(6) null,
     primary key (user_id),
-    foreign key (role_id) references roles(role_id)
+    foreign key (role_id) references role(role_id)
 ) engine = InnoDB;
