@@ -1,4 +1,4 @@
-package com.alkemy.ong.ports.input.rs.controller;
+package com.alkemy.ong.ports.input.rs.request.controller;
 
 import com.alkemy.ong.domain.model.Alkymer;
 import com.alkemy.ong.domain.model.AlkymerList;
