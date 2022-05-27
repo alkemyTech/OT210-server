@@ -21,13 +21,13 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE slides SET is_active=false WHERE slides_id=?")
+@SQLDelete(sql = "UPDATE slide SET is_active=false WHERE slide_id=?")
 @EntityListeners(AuditListener.class)
-public class Slides implements Auditable {
+public class Slide implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "slides_id")
+    @Column(name = "slide_id")
     private Long id;
 
     @Column(name = "image_url")
@@ -37,7 +37,7 @@ public class Slides implements Auditable {
 
     private String order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", insertable = false,nullable = false)
     @ToString.Exclude
     private Organization organizationId;
@@ -49,8 +49,8 @@ public class Slides implements Auditable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Slides slides = (Slides) o;
-        return Objects.equals(id, slides.id);
+        Slide slide = (Slide) o;
+        return Objects.equals(id, slide.id);
     }
 
     @Override
