@@ -46,6 +46,11 @@ public class New implements Auditable  {
     @Embedded
     private Audit audit;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", insertable = false,nullable = false)
+    @ToString.Exclude
+    private Category categoryId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -12,6 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
@@ -42,6 +43,10 @@ public class Category implements Auditable {
 
     @Embedded
     private Audit audit;
+
+    @OneToMany(mappedBy = "categoryId")
+    @ToString.Exclude
+    private Set<New> aNew;
 
     @Override
     public boolean equals(Object o) {
