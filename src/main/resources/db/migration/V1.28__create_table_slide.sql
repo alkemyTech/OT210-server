@@ -6,7 +6,7 @@ create table slide
     image_url         varchar(255)   null,
     text              varchar(255)   null,
     orde              varchar(255)   null,
-    organization_id   bigint         not null,
+    organization_id      bigint         not null,
     created_at        datetime(6)    not null,
     is_active         bit            not null,
     updated_at        datetime(6)    null,

@@ -3,7 +3,6 @@ package com.alkemy.ong.domain.model;
 import com.alkemy.ong.domain.model.audit.Audit;
 import com.alkemy.ong.domain.model.audit.AuditListener;
 import com.alkemy.ong.domain.model.audit.Auditable;
-import com.amazonaws.services.guardduty.model.Organization;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "slides")
+@Table(name = "slide")
 @Getter
 @Setter
 @ToString
@@ -35,12 +34,12 @@ public class Slide implements Auditable {
 
     private String text;
 
-    private String order;
+    private String orde;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id", insertable = false,nullable = false)
     @ToString.Exclude
-    private Organization organizationId;
+    private Organization organization;
 
     @Embedded
     private Audit audit;
