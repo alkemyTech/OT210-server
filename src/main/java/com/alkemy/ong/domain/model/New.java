@@ -22,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE news SET i@EntityListeners(AuditListener.class)s_active=false WHERE news_id=?")
+@SQLDelete(sql = "UPDATE news SET is_active=false WHERE news_id=?")
 @Entity
 @Table(name = "new")
 @EntityListeners(AuditListener.class)
