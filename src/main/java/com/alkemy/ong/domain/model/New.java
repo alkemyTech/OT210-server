@@ -1,6 +1,5 @@
 package com.alkemy.ong.domain.model;
 
-
 import com.alkemy.ong.domain.model.audit.Audit;
 import com.alkemy.ong.domain.model.audit.AuditListener;
 import com.alkemy.ong.domain.model.audit.Auditable;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Getter
@@ -20,39 +18,40 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE category SET is_active=false WHERE category_id=?")
+@SQLDelete(sql = "UPDATE new SET is_active=false WHERE new_id=?")
 @Entity
-@Table(name = "category")
+@Table(name = "new")
 @EntityListeners(AuditListener.class)
-public class Category implements Auditable {
+public class New implements Auditable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @Column(name = "new_id")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column
-    private String description;
+    @Column(nullable = false)
+    private String content;
 
-    @Column
+    @Column(nullable = false)
     private String image;
 
     @Embedded
     private Audit audit;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
     @ToString.Exclude
-    private Set<New> news;
+    private Category category;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-       Category category = (Category) o;
-        return Objects.equals(id, category.id);
+       New aNew = (New) o;
+        return Objects.equals(id, aNew.id);
     }
 
     @Override
