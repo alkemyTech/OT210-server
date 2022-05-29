@@ -4,8 +4,6 @@ import com.alkemy.ong.domain.model.Organization;
 import com.alkemy.ong.domain.model.OrganizationList;
 import com.alkemy.ong.domain.repository.OrganizationRepository;
 import com.alkemy.ong.domain.usecase.OrganizationService;
-import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
-import com.alkemy.ong.ports.input.rs.response.OrganizationResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
