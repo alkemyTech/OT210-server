@@ -29,15 +29,16 @@ public class Slide implements Auditable {
     @Column(name = "slide_id")
     private Long id;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     private String text;
 
-    private String orde;
+    @Column(name = "slide_order", nullable = false)
+    private Integer order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", insertable = false,nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     @ToString.Exclude
     private Organization organization;
 
