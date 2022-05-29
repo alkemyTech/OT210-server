@@ -40,13 +40,12 @@ public class Category implements Auditable {
     @Column
     private String image;
 
-
     @Embedded
     private Audit audit;
 
-    @OneToMany(mappedBy = "categoryId")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<New> aNew;
+    private Set<New> news;
 
     @Override
     public boolean equals(Object o) {
