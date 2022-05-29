@@ -49,7 +49,7 @@ public class User implements Auditable, UserDetails {
     private String photo;
 
     @OneToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
     @ToString.Exclude
     private Role role;
 
@@ -79,7 +79,20 @@ public class User implements Auditable, UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.getEmail();
+    }
+
+    public void setUsername(String username) {
+        this.email = email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
