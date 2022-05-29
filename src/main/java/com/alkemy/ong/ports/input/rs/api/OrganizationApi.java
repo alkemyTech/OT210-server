@@ -1,10 +1,8 @@
 package com.alkemy.ong.ports.input.rs.api;
 
-import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.response.OrganizationResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
