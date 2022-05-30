@@ -1,9 +1,9 @@
 package com.alkemy.ong.domain.usecase;
 
-import com.alkemy.ong.domain.model.OrganizationList;
+import com.alkemy.ong.domain.model.Organization;
 import org.springframework.data.domain.PageRequest;
 
 public interface OrganizationService {
 
-    OrganizationList getList(PageRequest pageRequest);
+    Organization getByIdIfExists(Long id);
 }
