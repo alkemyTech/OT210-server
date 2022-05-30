@@ -1,6 +1,5 @@
 package com.alkemy.ong.domain.model;
 
-
 import com.alkemy.ong.domain.model.audit.Audit;
 import com.alkemy.ong.domain.model.audit.AuditListener;
 import com.alkemy.ong.domain.model.audit.Auditable;
@@ -10,54 +9,52 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
-
+@Entity
+@Table(name = "slide")
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE category SET is_active=false WHERE category_id=?")
-@Entity
-@Table(name = "category")
+@SQLDelete(sql = "UPDATE slide SET is_active=false WHERE slide_id=?")
 @EntityListeners(AuditListener.class)
-public class Category implements Auditable {
+public class Slide implements Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @Column(name = "slide_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
 
-    @Column
-    private String description;
+    private String text;
 
-    @Column
-    private String image;
+    @Column(name = "slide_order", nullable = false)
+    private Integer order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id", nullable = false)
+    @ToString.Exclude
+    private Organization organization;
 
     @Embedded
     private Audit audit;
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Set<New> news;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-       Category category = (Category) o;
-        return Objects.equals(id, category.id);
+        Slide slide = (Slide) o;
+        return Objects.equals(id, slide.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }
