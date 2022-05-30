@@ -31,10 +31,13 @@ public class Member implements Auditable{
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "facebook_url")
     private String facebookUrl;
 
+    @Column(name = "instagram_url")
     private String instagramUrl;
 
+    @Column(name = "linkedin_url")
     private String linkedinUrl;
 
     @Column(name = "image", nullable = false)
