@@ -47,4 +47,9 @@ public class SendGridEmailService implements EmailService {
             throw new RuntimeException(ex);
         }
     }
+
+    private void sendWelcomeEmail(String to, String subject, String body){
+        sendHTML(to, subject, body);
+    }
+    
 }
