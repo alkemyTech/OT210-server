@@ -1,7 +1,6 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.common.security.JwtUtils;
-import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ import java.nio.file.AccessDeniedException;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
@@ -43,7 +42,7 @@ public class AuthController {
                     .build());
 
         }
-        throw new AccessDeniedException("error in the authenticatio process");
+        throw new AccessDeniedException("error in the authentication process");
 
 
     }
