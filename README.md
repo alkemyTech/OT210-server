@@ -19,29 +19,39 @@ Step 3: run the application.
 ```sh
  mvn spring-boot:run 
 ```
-## Datos de los usuarios creados
+# User data created
 
-### **Para el Usuario Regular Nº 1**
+## **For Regular User**
 
-* Nombre: nombreUsuario1
-* Apellido: apellidoUsuario1
-* Email: usuario1@email.com
-* Password: usuario1
+| User                | Password  | Role |
+|---------------------|-----------|------|
+| user1@somosmas.org  | usuario1  | USER |
+| user2@somosmas.org  | usuario2  | USER |
+| user3@somosmas.org  | usuario3  | USER |
+| user4@somosmas.org  | usuario4  | USER |
+| user5@somosmas.org  | usuario5  | USER |
+| user6@somosmas.org  | usuario6  | USER |
+| user7@somosmas.org  | usuario7  | USER |
+| user8@somosmas.org  | usuario8  | USER |
+| user9@somosmas.org  | usuario9  | USER |
+| user10@somosmas.org | usuario10 | USER |
 
-Para el Usuario Regular Nº 2 y hasta el Nº 10, tanto en el nombre, 
-apellido, email y password hay que cambiar el 1 por el número de
-usuario que corresponda.
+## **For Administrator**
 
-### **Para el Administrador Nº 1**
+| User                 | Password        | Role  |
+|----------------------|-----------------|-------|
+| admin1@somosmas.org  | administrador1  | ADMIN |
+| admin2@somosmas.org  | administrador2  | ADMIN |
+| admin3@somosmas.org  | administrador3  | ADMIN |
+| admin4@somosmas.org  | administrador4  | ADMIN |
+| admin5@somosmas.org  | administrador5  | ADMIN |
+| admin6@somosmas.org  | administrador6  | ADMIN |
+| admin7@somosmas.org  | administrador7  | ADMIN |
+| admin8@somosmas.org  | administrador8  | ADMIN |
+| admin9@somosmas.org  | administrador9  | ADMIN |
+| admin10@somosmas.org | administrador10 | ADMIN |
 
-* Nombre: nombreAdministrador1
-* Apellido: apellidoAdministrador1
-* Email: administrador1@email.com
-* Password: administrador1
 
-Para el Administrador Nº 2 y hasta el Nº 10, tanto en el nombre,
-apellido, email y password hay que cambiar el 1 por el número de
-administrador que corresponda.
 
 
 

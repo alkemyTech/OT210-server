@@ -1,8 +1,8 @@
-INSERT INTO role (role_id, name, description, is_active, created_at, updated_at)
+insert into role (role_id, name, description, is_active, created_at, updated_at)
 
-                   VALUES
+                   values
 
-                   ('1', 'Administrador', 'Usuario con rol de Administrador', 1, '2022-05-29', '2022-05-29'),
+                   ('1', 'ROLE_ADMIN', 'User with Administrator Role', 1, current_timestamp, null),
 
-                   ('2', 'Usuario', 'Usuario con rol de Usuario Regular', 1, '2022-05-29', '2022-05-29');
+                   ('2', 'ROLE_USER', 'User with Regular User Role', 1, CURRENT_TIMESTAMP, null);
 
