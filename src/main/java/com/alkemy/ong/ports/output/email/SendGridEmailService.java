@@ -6,6 +6,7 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import com.sendgrid.helpers.mail.objects.Personalization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,11 +19,18 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SendGridEmailService implements EmailService {
 
+
     private static final String NO_REPLY_SOMOSMAS_ORG = "no-reply@somosmas.org";
     private final SendGrid sendGridClient;
-    private static final String templateId = "5ba54d09-0af1-4648-8c64-940509a7c5e9";
+
     @Value("${email.from}")
     private String emailFrom;
+
+    @Value("${email.welcomeSubject}")
+    private String welcomeSubject;
+
+    @Value("$email.sendgrid.template")
+    private String templateId;
 
     @Override
     public void sendText(String to, String subject, String body) {
@@ -49,9 +57,24 @@ public class SendGridEmailService implements EmailService {
         }
     }
 
-    private void sendWelcomeEmail(String to, String subject, String body){
-        subject = "Thanks for being part of Somos Mas";
-        this.sendHTML(to, subject, body);
+    private void sendWelcomeEmail(String to){
+        Mail mail = new Mail();
+        mail.setFrom(new Email(this.emailFrom));
+        mail.setSubject(this.welcomeSubject);
+        Personalization p= new Personalization();
+        p.addTo(new Email(to));
+        mail.setTemplateId(templateId);
+        mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
+        try {
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("/mail/send");
+            request.setBody(mail.build());
+            this.sendGridClient.api(request);
+        } catch (IOException ex) {
+            log.error("Error sending email", ex);
+            throw new RuntimeException(ex);
+        }
     }
 
 }
