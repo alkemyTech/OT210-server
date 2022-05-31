@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class S3ServiceImpl implements S3Service {
@@ -31,7 +33,8 @@ public class S3ServiceImpl implements S3Service {
             uploadFileToS3Bucket(fileName, file);
             file.delete();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("error uploading file", e);
+            throw new RuntimeException(e);
         }
         return fileUrl;
     }
