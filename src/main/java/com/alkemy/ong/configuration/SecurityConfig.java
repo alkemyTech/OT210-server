@@ -2,7 +2,6 @@ package com.alkemy.ong.configuration;
 
 import com.alkemy.ong.common.exception.handler.AuthenticationEntryPointHandler;
 import com.alkemy.ong.common.exception.handler.CustomAccessDeniedHandler;
-import com.alkemy.ong.common.security.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @RequiredArgsConstructor
@@ -25,21 +23,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
-    private final JwtRequestFilter jwtRequestFilter;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/auth").permitAll()
-                .anyRequest().hasRole("USER")
-                .and()
-                .exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPointHandler())
-                .accessDeniedHandler( new CustomAccessDeniedHandler())
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(STATELESS)
-                .and()
-                .addFilterBefore(jwtRequestFilter,UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/api/docs/**", "/api/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .antMatchers(HttpMethod.POST).hasRole("ADMIN")
+                .antMatchers(HttpMethod.PATCH).hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT).hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET).authenticated()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(new AuthenticationEntryPointHandler())
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
+                .and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);;
+
     }
 
     @Override
