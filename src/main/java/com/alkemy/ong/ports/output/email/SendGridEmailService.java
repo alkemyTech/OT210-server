@@ -20,6 +20,7 @@ public class SendGridEmailService implements EmailService {
 
     private static final String NO_REPLY_SOMOSMAS_ORG = "no-reply@somosmas.org";
     private final SendGrid sendGridClient;
+    private static final String templateId = "5ba54d09-0af1-4648-8c64-940509a7c5e9";
     @Value("${email.from}")
     private String emailFrom;
 
@@ -30,7 +31,7 @@ public class SendGridEmailService implements EmailService {
 
     @Override
     public void sendHTML(String to, String subject, String body) {
-        sendEmail(this.emailFrom, to, subject, new Content("text/html", body));
+        sendEmail(this.emailFrom, to, subject, new Content("text/html", templateId));
     }
 
     private void sendEmail(String from, String to, String subject, Content content) {
@@ -49,7 +50,8 @@ public class SendGridEmailService implements EmailService {
     }
 
     private void sendWelcomeEmail(String to, String subject, String body){
-        sendHTML(to, subject, body);
+        subject = "Thanks for being part of Somos Mas";
+        this.sendHTML(to, subject, body);
     }
-    
+
 }
