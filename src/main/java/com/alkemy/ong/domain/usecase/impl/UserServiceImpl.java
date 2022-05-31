@@ -28,4 +28,5 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return getByEmail(username);
     }
+
 }
