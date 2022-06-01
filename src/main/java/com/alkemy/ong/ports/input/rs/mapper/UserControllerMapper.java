@@ -11,7 +11,7 @@ public interface UserControllerMapper extends CommonMapper{
 
     @Named("userToUserResponse")
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "firstName", source = "firstname")
+    @Mapping(target = "firstName", source = "firstName")
     @Mapping(target = "lastName", source ="lastName")
     @Mapping(target = "email", source ="email")
     @Mapping(target = "photo" , source = "photo")
