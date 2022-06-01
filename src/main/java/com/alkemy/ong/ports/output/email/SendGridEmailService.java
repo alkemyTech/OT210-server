@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.output.email;
 
+import com.alkemy.ong.domain.model.Organization;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
@@ -57,14 +58,18 @@ public class SendGridEmailService implements EmailService {
         }
     }
 
-    private void sendWelcomeEmail(String to, String image, String name, String welcome_text){
+    private void sendWelcomeEmail(String to){
         Mail mail = new Mail();
         mail.setFrom(new Email(this.emailFrom));
         mail.setSubject(this.welcomeSubject);
         Personalization p= new Personalization();
         p.addTo(new Email(to));
+        Organization organization = new Organization();
+        String image = organization.getImage();
         p.addDynamicTemplateData("image", image);
+        String name = organization.getName();
         p.addDynamicTemplateData("name", name);
+        String welcome_text = organization.getWelcomeText();
         p.addDynamicTemplateData("welcome_text", welcome_text);
         mail.addPersonalization(p);
         mail.setTemplateId(templateId);
