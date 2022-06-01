@@ -4,7 +4,6 @@ import com.alkemy.ong.common.security.JwtUtils;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
-import com.alkemy.ong.ports.input.rs.response.MeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
