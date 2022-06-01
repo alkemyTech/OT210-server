@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.output.email;
 
+import com.amazonaws.services.guardduty.model.Organization;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
@@ -9,6 +10,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +21,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class SendGridEmailService implements EmailService {
 
-
-    private static final String NO_REPLY_SOMOSMAS_ORG = "no-reply@somosmas.org";
     private final SendGrid sendGridClient;
+
+    @Autowired()
+    private Organization organization;
 
     @Value("${email.from}")
     private String emailFrom;
@@ -31,6 +34,8 @@ public class SendGridEmailService implements EmailService {
 
     @Value("$email.sendgrid.template")
     private String templateId;
+
+    private static final String NO_REPLY_SOMOSMAS_ORG = "no-reply@somosmas.org";
 
     @Override
     public void sendText(String to, String subject, String body) {
@@ -57,12 +62,16 @@ public class SendGridEmailService implements EmailService {
         }
     }
 
-    private void sendWelcomeEmail(String to){
+    private void sendWelcomeEmail(String to, String image, String name, String welcome_text){
         Mail mail = new Mail();
         mail.setFrom(new Email(this.emailFrom));
         mail.setSubject(this.welcomeSubject);
         Personalization p= new Personalization();
         p.addTo(new Email(to));
+        p.addDynamicTemplateData("image", image);
+        p.addDynamicTemplateData("name", name);
+        p.addDynamicTemplateData("welcome_text", welcome_text);
+        mail.addPersonalization(p);
         mail.setTemplateId(templateId);
         mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
         try {
