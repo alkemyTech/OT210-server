@@ -3,15 +3,12 @@ package com.alkemy.ong.configuration;
 import com.alkemy.ong.common.exception.handler.AuthenticationEntryPointHandler;
 import com.alkemy.ong.common.exception.handler.CustomAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -33,13 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);;
-
     }
 
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean()throws Exception{
-        return super.authenticationManagerBean();
-    }
 }
