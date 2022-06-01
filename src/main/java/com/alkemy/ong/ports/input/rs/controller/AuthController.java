@@ -16,13 +16,9 @@ public class AuthController {
 
     private final UserControllerMapper userMapper;
 
-
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
-
         UserResponse userResponse = userMapper.userToUserResponse(user);
-
         return  new ResponseEntity<>(userResponse, HttpStatus.OK);
-
     }
 }

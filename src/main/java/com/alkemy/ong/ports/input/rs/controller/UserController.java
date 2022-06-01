@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
-import static com.alkemy.ong.ports.input.rs.api.ApiConstants.ALKYMERS_URI;
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.USERS_URI;
 
 @RestController
