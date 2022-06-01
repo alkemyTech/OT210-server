@@ -4,6 +4,7 @@ import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,7 @@ public class AuthController {
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
 
         UserResponse userResponse = userMapper.userToUserResponse(user);
+        return  new ResponseEntity<>(userResponse, HttpStatus.OK);
 
-
-
-        return null;
     }
 }

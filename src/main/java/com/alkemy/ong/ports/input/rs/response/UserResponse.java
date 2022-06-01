@@ -13,6 +13,7 @@ public class UserResponse {
 
     private Long id;
     private String firstname;
+    private String lastName;
     private String email;
     private String photo;
 
