@@ -15,6 +15,7 @@ public interface UserControllerMapper extends CommonMapper{
     @IterableMapping(qualifiedByName = "userToUserResponse")
     List<UserResponse> userListToUserListResponse(List<User> users);
 
+
     @Named("userToUserResponse")
     @Mapping(target = "id", source = "id")
     @Mapping(target = "firstName", source = "firstName")
