@@ -1,6 +1,5 @@
 package com.alkemy.ong.ports.output.email;
 
-import com.amazonaws.services.guardduty.model.Organization;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
@@ -10,7 +9,6 @@ import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +20,6 @@ import java.io.IOException;
 public class SendGridEmailService implements EmailService {
 
     private final SendGrid sendGridClient;
-
-    @Autowired()
-    private Organization organization;
 
     @Value("${email.from}")
     private String emailFrom;
