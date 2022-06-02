@@ -58,7 +58,8 @@ public class SendGridEmailService implements EmailService {
         }
     }
 
-    private void sendWelcomeEmail(String to){
+    @Override
+    public void sendWelcomeEmail(String to){
         Mail mail = new Mail();
         mail.setFrom(new Email(this.emailFrom));
         mail.setSubject(this.welcomeSubject);
@@ -72,7 +73,7 @@ public class SendGridEmailService implements EmailService {
         String welcome_text = organization.getWelcomeText();
         p.addDynamicTemplateData("welcome_text", welcome_text);
         mail.addPersonalization(p);
-        mail.setTemplateId(templateId);
+        mail.setTemplateId(this.templateId);
         mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
         try {
             Request request = new Request();
