@@ -28,7 +28,7 @@ public class SendGridEmailService implements EmailService {
     @Value("${email.welcomeSubject}")
     private String welcomeSubject;
 
-    @Value("$email.sendgrid.template")
+    @Value("${email.sendgrid.template}")
     private String templateId;
 
     private static final String NO_REPLY_SOMOSMAS_ORG = "no-reply@somosmas.org";
