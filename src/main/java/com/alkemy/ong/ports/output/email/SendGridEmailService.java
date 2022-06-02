@@ -65,6 +65,7 @@ public class SendGridEmailService implements EmailService {
         mail.setSubject(this.welcomeSubject);
         Personalization p= new Personalization();
         p.addTo(new Email(to));
+ feature/OT210-29
         Organization organization = new Organization();
         String image = organization.getImage();
         p.addDynamicTemplateData("image", image);
@@ -73,6 +74,8 @@ public class SendGridEmailService implements EmailService {
         String welcome_text = organization.getWelcomeText();
         p.addDynamicTemplateData("welcome_text", welcome_text);
         mail.addPersonalization(p);
+=======
+        main
         mail.setTemplateId(this.templateId);
         mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
         try {
