@@ -59,19 +59,22 @@ public class SendGridEmailService implements EmailService {
     }
 
     @Override
-    public void sendWelcomeEmail(String to){
+    public void sendWelcomeEmail(String to, Organization organization){
         Mail mail = new Mail();
         mail.setFrom(new Email(this.emailFrom));
         mail.setSubject(this.welcomeSubject);
         Personalization p= new Personalization();
         p.addTo(new Email(to));
-        Organization organization = new Organization();
         String image = organization.getImage();
         p.addDynamicTemplateData("image", image);
         String name = organization.getName();
         p.addDynamicTemplateData("name", name);
         String welcome_text = organization.getWelcomeText();
         p.addDynamicTemplateData("welcome_text", welcome_text);
+        String email = organization.getEmail();
+        p.addDynamicTemplateData("email", email);
+        Integer phone = organization.getPhone();
+        p.addDynamicTemplateData("phone", phone);
         mail.addPersonalization(p);
         mail.setTemplateId(this.templateId);
         mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
