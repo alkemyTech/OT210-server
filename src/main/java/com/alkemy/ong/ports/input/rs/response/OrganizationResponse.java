@@ -19,13 +19,4 @@ public class OrganizationResponse {
     private Integer phone;
 
     private String address;
-
-    @JsonProperty("facebook_contact")
-    private String facebookContact;
-
-    @JsonProperty("linkedin_contact")
-    private String linkedinContact;
-
-    @JsonProperty("instagram_contact")
-    private String instagramContact;
 }
