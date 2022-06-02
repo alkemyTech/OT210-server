@@ -28,12 +28,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void updateEntityIfExists(Long id, Organization organization) {
         organizationRepository.findById(id)
                 .map(organizationJpa -> {
-                    Optional.ofNullable(organization.getName()).ifPresent(organizationJpa::setName);
-                    Optional.ofNullable(organization.getImage()).ifPresent(organizationJpa::setImage);
-                    Optional.ofNullable(organization.getAddress()).ifPresent(organizationJpa::setAddress);
-                    Optional.ofNullable(organization.getPhone()).ifPresent(organizationJpa::setPhone);
-                    Optional.ofNullable(organization.getWelcomeText()).ifPresent(organizationJpa::setWelcomeText);
-                    Optional.ofNullable(organization.getAboutUsText()).ifPresent(organizationJpa::setAboutUsText);
+                    organizationJpa.setName(organization.getName());
+                    organizationJpa.setImage(organization.getImage());
+                    organizationJpa.setAddress(organization.getAddress());
+                    organizationJpa.setPhone(organization.getPhone());
+                    organizationJpa.setWelcomeText(organization.getWelcomeText());
+                    organizationJpa.setAboutUsText(organization.getAboutUsText());
                     return organizationRepository.save(organizationJpa);
                 }).orElseThrow(() -> new NotFoundException(id));
     }
