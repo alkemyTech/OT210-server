@@ -40,8 +40,9 @@ public class TestimonialController implements TestimonialApi {
         return ResponseEntity.created(location).build();
     }
 
+    @Override
     @PutMapping("/{id}")
-    public ResponseEntity<CreateTestimonialRequest> updateTestimonials(@PathVariable Long id, @RequestBody Testimonial testimonial){
+    public ResponseEntity<CreateTestimonialRequest> updateTestimonial(@PathVariable Long id, @RequestBody Testimonial testimonial){
 
         Optional<Testimonial> testimonial1 = service.updateIfExists(id,testimonial);
 
