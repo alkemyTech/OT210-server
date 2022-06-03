@@ -83,16 +83,12 @@ public class User implements Auditable, UserDetails {
     }
 
     public void setUsername(String username) {
-        this.email = email;
+        this.email = username;
     }
 
     @Override
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override
