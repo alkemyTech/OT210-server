@@ -1,6 +1,5 @@
-package com.alkemy.ong.configuration.filter;
+package com.alkemy.ong.common.security;
 
-import com.alkemy.ong.common.security.JwtUtils;
 import com.alkemy.ong.domain.usecase.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
