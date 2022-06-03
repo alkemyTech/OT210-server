@@ -18,4 +18,9 @@ public class TestimonialServiceImpl implements TestimonialService {
     public Long createEntity(Testimonial testimonial) {
         return testimonialJpaRepository.save(testimonial).getId();
     }
+
+    @Override
+    public void deleteTestimonial(Long id) {
+        testimonialJpaRepository.deleteById(id);
+    }
 }

@@ -6,10 +6,9 @@ import com.alkemy.ong.ports.input.rs.api.TestimonialApi;
 import com.alkemy.ong.ports.input.rs.mapper.TestimonialControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -40,4 +39,13 @@ public class TestimonialController implements TestimonialApi {
 
         return ResponseEntity.created(location).build();
     }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id) {
+        service.deleteTestimonial(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }
