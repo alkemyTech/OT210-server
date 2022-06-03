@@ -89,4 +89,5 @@ public class SendGridEmailService implements EmailService {
             throw new RuntimeException(ex);
         }
     }
+
 }
