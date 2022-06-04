@@ -49,10 +49,10 @@ public class Organization implements Auditable {
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "welcome_text", nullable = false)
+    @Column(name = "welcome_text", nullable = false, columnDefinition = "TEXT")
     private String welcomeText;
 
-    @Column(name = "about_us_text")
+    @Column(name = "about_us_text", columnDefinition = "TEXT")
     private String aboutUsText;
 
     @Column(name = "facebook_contact")
