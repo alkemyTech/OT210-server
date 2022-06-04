@@ -33,6 +33,9 @@ public class OrganizationServiceImpl implements OrganizationService {
                     organizationJpa.setPhone(organization.getPhone());
                     organizationJpa.setWelcomeText(organization.getWelcomeText());
                     organizationJpa.setAboutUsText(organization.getAboutUsText());
+                    organizationJpa.setFacebookContact(organization.getFacebookContact());
+                    organizationJpa.setLinkedinContact(organization.getLinkedinContact());
+                    organizationJpa.setInstagramContact(organization.getInstagramContact());
                     return organizationRepository.save(organizationJpa);
                 }).orElseThrow(() -> new NotFoundException(id));
     }

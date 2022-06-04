@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrganizationResponse {
+
     private String name;
+
     private String image;
+
     private Integer phone;
+
     private String address;
 }
