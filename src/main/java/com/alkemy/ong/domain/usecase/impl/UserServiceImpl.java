@@ -1,49 +1,34 @@
 package com.alkemy.ong.domain.usecase.impl;
 
+import com.alkemy.ong.domain.model.User;
+import com.alkemy.ong.domain.model.UserList;
 import com.alkemy.ong.domain.repository.UserRepository;
 import com.alkemy.ong.domain.usecase.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userJpaRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) {
+        return userJpaRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("username %s not found".formatted(email)));
+    }
 
-        com.alkemy.ong.domain.model.User userEntity = userRepository.findByEmail(email);
-
-        if (userEntity != null) {
-
-            List<GrantedAuthority> permission = new ArrayList<>();
-            GrantedAuthority permission1 = new SimpleGrantedAuthority("ROLE_" + userEntity.getRole());
-            permission.add(permission1);
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            HttpSession session = attributes.getRequest().getSession(true);
-            session.setAttribute("user-session", userEntity);
-            return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(), permission);
-
-        } else {
-            return null;
-        }
+    @Override
+    @Transactional(readOnly = true)
+    public UserList getList(PageRequest pageRequest) {
+        Page<User> page = userJpaRepository.findAll(pageRequest);
+        return new UserList(page.getContent(),pageRequest,page.getTotalElements());
     }
 }

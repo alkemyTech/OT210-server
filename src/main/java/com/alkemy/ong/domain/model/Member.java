@@ -1,6 +1,5 @@
 package com.alkemy.ong.domain.model;
 
-
 import com.alkemy.ong.domain.model.audit.Audit;
 import com.alkemy.ong.domain.model.audit.AuditListener;
 import com.alkemy.ong.domain.model.audit.Auditable;
@@ -10,49 +9,51 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Objects;
-import java.util.Set;
-
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
+@Entity(name = "member")
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE category SET is_active=false WHERE category_id=?")
-@Entity
-@Table(name = "category")
+@SQLDelete(sql = "UPDATE member SET is_active=false WHERE member_id=?")
 @EntityListeners(AuditListener.class)
-public class Category implements Auditable {
+public class Member implements Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @Column(name = "member_id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column
-    private String description;
+    @Column(name = "facebook_url")
+    private String facebookUrl;
 
-    @Column
+    @Column(name = "instagram_url")
+    private String instagramUrl;
+
+    @Column(name = "linkedin_url")
+    private String linkedinUrl;
+
+    @Column(name = "image", nullable = false)
     private String image;
+
+    private String description;
 
     @Embedded
     private Audit audit;
-
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Set<New> news;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-       Category category = (Category) o;
-        return Objects.equals(id, category.id);
+        Member m = (Member) o;
+        return Objects.equals(id, m.id);
     }
 
     @Override
