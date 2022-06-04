@@ -10,7 +10,14 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
@@ -47,6 +54,15 @@ public class Organization implements Auditable {
 
     @Column(name = "about_us_text", columnDefinition = "TEXT")
     private String aboutUsText;
+
+    @Column(name = "facebook_contact")
+    private String facebookContact;
+
+    @Column(name = "linkedin_contact")
+    private String linkedinContact;
+
+    @Column(name = "instagram_contact")
+    private String instagramContact;
 
     @Embedded
     private Audit audit;

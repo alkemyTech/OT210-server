@@ -26,5 +26,13 @@ public class UpdateOrganizationRequest {
     @JsonProperty("about_us_text")
     private String aboutUsText;
 
+    @JsonProperty("facebook_contact")
+    private String facebookContact;
+
+    @JsonProperty("linkedin_contact")
+    private String linkedinContact;
+
+    @JsonProperty("instagram_contact")
+    private String instagramContact;
 
 }
