@@ -20,6 +20,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
+    @Transactional
     public void deleteTestimonial(Long id) {
         testimonialJpaRepository.deleteById(id);
     }

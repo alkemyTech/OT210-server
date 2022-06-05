@@ -44,7 +44,7 @@ public class TestimonialController implements TestimonialApi {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id) {
         service.deleteTestimonial(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
