@@ -7,7 +7,7 @@ import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.Optional;
+
 
 @Mapper
 public interface TestimonialControllerMapper extends CommonMapper {
@@ -15,10 +15,10 @@ public interface TestimonialControllerMapper extends CommonMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "image", source = "image")
     @Mapping(target = "content",source = "content")
-    TestimonialResponse testimonialRequestToTestimonialResponse(TestimonialRequest testimonialRequest);
     Testimonial testimonialRequestToTestimonial(TestimonialRequest testimonialRequest);
-    TestimonialResponse testimonialToTestimonialResponse(Optional<Testimonial> testimonial);;
+    TestimonialResponse testimonialToTestimonialResopnse(Testimonial testimonial);
 
     Testimonial createTestimonialRequestToTestimonial(CreateTestimonialRequest create);
+
 
 }

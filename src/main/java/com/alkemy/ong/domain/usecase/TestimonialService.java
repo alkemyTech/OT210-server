@@ -9,5 +9,5 @@ public interface TestimonialService {
 
     Long createEntity(Testimonial testimonial);
 
-    Optional<Testimonial> updateIfExists(Long id, Testimonial testimonial);
+    Testimonial updateIfExists(Long id, Testimonial testimonial);
 }

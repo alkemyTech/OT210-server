@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Optional;
 
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.TESTIMONIALS_URI;
 
@@ -44,13 +43,11 @@ public class TestimonialController implements TestimonialApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody TestimonialRequest testimonialRequest){
+    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest){
 
         Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
-
-        Optional<Testimonial> testimonialContainer = service.updateIfExists(id,testimonial);
-
-        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResponse(testimonialContainer);
+        Testimonial testimonial1 = service.updateIfExists(id ,testimonial);
+        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResopnse(testimonial1);
 
         return new ResponseEntity<>(testimonialResponse, HttpStatus.OK);
     }

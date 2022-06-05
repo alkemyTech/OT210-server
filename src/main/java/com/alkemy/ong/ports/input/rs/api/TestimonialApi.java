@@ -13,5 +13,5 @@ import javax.validation.Valid;
 public interface TestimonialApi {
 
     ResponseEntity<Void> createTestimonial(@Valid CreateTestimonialRequest createTestimonialRequest);
-    ResponseEntity<TestimonialResponse> updateTestimonial(Long id, TestimonialRequest testimonialRequest);
+    ResponseEntity<TestimonialResponse> updateTestimonial(@Valid Long id, TestimonialRequest testimonialRequest);
 }

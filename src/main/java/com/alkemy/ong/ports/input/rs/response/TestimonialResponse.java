@@ -14,15 +14,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class TestimonialResponse {
 
-    @NotBlank
-    @JsonProperty("name")
+
     private String name;
-
-    @JsonProperty("image")
     private String image;
-
-    @NotBlank
-    @JsonProperty("content")
     private String content;
 
 }
