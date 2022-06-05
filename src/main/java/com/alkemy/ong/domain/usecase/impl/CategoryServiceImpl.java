@@ -22,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void deleteCategory(Long id) {
-        categoryJpaRepository.deleteById(id);
+        categoryJpaRepository.findById(id).ifPresent(categoryJpaRepository::delete);
     }
 
 }
