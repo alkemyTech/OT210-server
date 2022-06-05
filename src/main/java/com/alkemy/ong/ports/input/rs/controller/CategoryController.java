@@ -42,7 +42,7 @@ public class CategoryController implements CategoryApi {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@NotNull @PathVariable Long id) {
         service.deleteCategory(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
