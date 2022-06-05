@@ -2,6 +2,7 @@ package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.common.security.JwtUtils;
 import com.alkemy.ong.domain.model.User;
+import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
@@ -11,16 +12,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(ApiConstants.AUTHENTICATION_URI)
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -32,18 +37,18 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);
-        return  new ResponseEntity<>(userResponse, HttpStatus.OK);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request) throws AccessDeniedException {
 
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.username(),request.password()));
+                .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
-        if(authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails users){
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails users) {
 
-            final  String token = jwtUtils.generateToken(users);
+            final String token = jwtUtils.generateToken(users);
 
             return ResponseEntity.ok(AuthenticationResponse.builder()
                     .token(token)

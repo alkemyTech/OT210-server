@@ -1,6 +1,5 @@
 package com.alkemy.ong.common.security;
 
-
 import com.alkemy.ong.domain.usecase.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,6 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final UserServiceImpl userServiceImpl;
