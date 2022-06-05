@@ -5,6 +5,8 @@ import com.alkemy.ong.domain.usecase.TestimonialService;
 import com.alkemy.ong.ports.input.rs.api.TestimonialApi;
 import com.alkemy.ong.ports.input.rs.mapper.TestimonialControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
+import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
+import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +44,14 @@ public class TestimonialController implements TestimonialApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<CreateTestimonialRequest> updateTestimonial(@PathVariable Long id, @RequestBody Testimonial testimonial){
+    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody TestimonialRequest testimonialRequest){
 
-        Optional<Testimonial> testimonial1 = service.updateIfExists(id,testimonial);
+        Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
 
-        CreateTestimonialRequest testimonialRequest = mapper.testimonialToCreateTestimonialRequest(testimonial1);
+        Optional<Testimonial> testimonialContainer = service.updateIfExists(id,testimonial);
 
-        return new ResponseEntity<>(testimonialRequest, HttpStatus.OK);
+        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResponse(testimonialContainer);
+
+        return new ResponseEntity<>(testimonialResponse, HttpStatus.OK);
     }
 }
