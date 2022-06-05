@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.output.email;
 
+import com.alkemy.ong.domain.model.Organization;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
@@ -21,9 +22,6 @@ public class SendGridEmailService implements EmailService {
 
     private final SendGrid sendGridClient;
 
-    @Value("${email.from}")
-    private String emailFrom;
-
     @Value("${email.welcomeSubject}")
     private String welcomeSubject;
 
@@ -33,39 +31,39 @@ public class SendGridEmailService implements EmailService {
     private static final String NO_REPLY_SOMOSMAS_ORG = "no-reply@somosmas.org";
 
     @Override
-    public void sendText(String to, String subject, String body) {
-        sendEmail(this.emailFrom, to, subject, new Content("text/plain", body));
-    }
-
-    @Override
-    public void sendHTML(String to, String subject, String body) {
-        sendEmail(this.emailFrom, to, subject, new Content("text/html", templateId));
-    }
-
-    private void sendEmail(String from, String to, String subject, Content content) {
-        Mail mail = new Mail(new Email(from), subject, new Email(to), content);
+    public void sendText(String from, String to, String subject, String body) {
+        Mail mail = new Mail(new Email(from), subject, new Email(to), new Content("text/plain", body));
         mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
-        try {
-            Request request = new Request();
-            request.setMethod(Method.POST);
-            request.setEndpoint("/mail/send");
-            request.setBody(mail.build());
-            this.sendGridClient.api(request);
-        } catch (IOException ex) {
-            log.error("Error sending email", ex);
-            throw new RuntimeException(ex);
-        }
+        send(mail);
     }
 
     @Override
-    public void sendWelcomeEmail(String to){
+    public void sendHTML(String from, String to, String subject, String body) {
+        Mail mail = new Mail(new Email(from), subject, new Email(to), new Content("text/html", body));
+        mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
+        send(mail);
+    }
+
+    @Override
+    public void sendWelcomeEmail(String to, Organization organization) {
         Mail mail = new Mail();
-        mail.setFrom(new Email(this.emailFrom));
         mail.setSubject(this.welcomeSubject);
-        Personalization p= new Personalization();
-        p.addTo(new Email(to));
         mail.setTemplateId(this.templateId);
-        mail.setReplyTo(new Email(NO_REPLY_SOMOSMAS_ORG));
+
+        Email from = new Email(organization.getEmail());
+        mail.setFrom(from);
+
+        Email replyTo = new Email(NO_REPLY_SOMOSMAS_ORG);
+        mail.setReplyTo(replyTo);
+
+        Email userEmail = new Email(to);
+        Personalization personalization = personalization(userEmail, organization);
+        mail.addPersonalization(personalization);
+
+        send(mail);
+    }
+
+    private void send(Mail mail) {
         try {
             Request request = new Request();
             request.setMethod(Method.POST);
@@ -76,6 +74,21 @@ public class SendGridEmailService implements EmailService {
             log.error("Error sending email", ex);
             throw new RuntimeException(ex);
         }
+    }
+
+    private Personalization personalization(Email userEmail, Organization organization) {
+        Personalization personalization;
+        personalization = new Personalization();
+        personalization.addTo(userEmail);
+        personalization.addDynamicTemplateData("image", organization.getImage());
+        personalization.addDynamicTemplateData("name", organization.getName());
+        personalization.addDynamicTemplateData("welcome_text", organization.getWelcomeText());
+        personalization.addDynamicTemplateData("email", organization.getEmail());
+        personalization.addDynamicTemplateData("phone", organization.getPhone());
+        personalization.addDynamicTemplateData("linkedin", organization.getLinkedinContact());
+        personalization.addDynamicTemplateData("facebook", organization.getFacebookContact());
+        personalization.addDynamicTemplateData("instagram", organization.getInstagramContact());
+        return personalization;
     }
 
 }

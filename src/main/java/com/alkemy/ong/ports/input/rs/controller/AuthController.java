@@ -1,30 +1,39 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.common.security.JwtUtils;
+import com.alkemy.ong.domain.model.User;
+import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
+import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import javax.validation.Valid;
 import java.nio.file.AccessDeniedException;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-
+    private final UserControllerMapper userMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
+        UserResponse userResponse = userMapper.userToUserResponse(user);
+        return  new ResponseEntity<>(userResponse, HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request) throws AccessDeniedException {
@@ -38,12 +47,10 @@ public class AuthController {
 
             return ResponseEntity.ok(AuthenticationResponse.builder()
                     .token(token)
-                    .expirationDate(jwtUtils.extractExpirationDate(token))
+                    .expirationDate(jwtUtils.extractExpiration(token))
                     .build());
 
         }
         throw new AccessDeniedException("error in the authentication process");
-
-
     }
 }
