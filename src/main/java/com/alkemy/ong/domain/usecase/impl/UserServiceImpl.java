@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userJpaRepository;
     private final EmailService emailService;
     private final OrganizationService organizationService;
+    private final PasswordEncoder passwordEncoder;
     @Value("${main.organization.id}")
     private Long id;
 
@@ -49,6 +51,8 @@ public class UserServiceImpl implements UserService {
                     "There is already an account with that email address: " + user.getEmail()
             );
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         emailService.sendWelcomeEmail(user.getEmail(), organizationService.getByIdIfExists(id));
 

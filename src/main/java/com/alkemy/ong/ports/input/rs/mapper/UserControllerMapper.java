@@ -30,5 +30,6 @@ public interface UserControllerMapper extends CommonMapper{
     @Mapping(target = "lastName", source ="lastName")
     @Mapping(target = "email", source ="email")
     @Mapping(target = "photo", source ="photo")
+    @Mapping(target = "password", source ="password")
     User createUserRequestToUser(CreateUserRequest createUserRequest);
 }
