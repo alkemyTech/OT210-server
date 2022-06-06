@@ -6,4 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
     UserList getList(PageRequest pageRequest);
+
+    void deleteUser(Long id);
 }

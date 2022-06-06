@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -29,6 +31,16 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserList getList(PageRequest pageRequest) {
         Page<User> page = userJpaRepository.findAll(pageRequest);
-        return new UserList(page.getContent(),pageRequest,page.getTotalElements());
+        return new UserList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        Optional<User> optional = userJpaRepository.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            userJpaRepository.delete(user);
+        }
     }
 }
