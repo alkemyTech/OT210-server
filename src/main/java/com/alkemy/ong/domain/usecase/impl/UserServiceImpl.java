@@ -1,17 +1,18 @@
 package com.alkemy.ong.domain.usecase.impl;
 
+import com.alkemy.ong.common.exception.ConflictException;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.model.UserList;
 import com.alkemy.ong.domain.repository.UserRepository;
+import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.domain.usecase.UserService;
-import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
 import com.alkemy.ong.ports.output.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userJpaRepository;
-    private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final OrganizationService organizationService;
+    @Value("${main.organization.id}")
+    private Long id;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,32 +42,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User registerNewUser(CreateUserRequest userRequest) {
+    public User registerNewUser(User user) {
 
-        if (emailExists(userRequest.getEmail())) {
-            throw new RuntimeException(
-                    "There is already an account with that email address: " + userRequest.getEmail()
+        if (emailExists(user.getEmail())) {
+            throw new ConflictException(
+                    "There is already an account with that email address: " + user.getEmail()
             );
         }
-        User user = makeUserFromRequest(userRequest);
 
-//        emailService.sendWelcomeEmail(user.getEmail(), someOrganization);
+        emailService.sendWelcomeEmail(user.getEmail(), organizationService.getByIdIfExists(id));
 
         return userJpaRepository.save(user);
-    }
-
-    private User makeUserFromRequest(CreateUserRequest userRequest) {
-        User user = new User();
-
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setEmail(userRequest.getEmail());
-
-        user.setPassword(passwordEncoder.encode(
-                userRequest.getPassword()
-        ));
-
-        return user;
     }
 
     private boolean emailExists(String email) {

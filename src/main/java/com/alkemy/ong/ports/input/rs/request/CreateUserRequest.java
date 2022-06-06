@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -32,6 +31,7 @@ public class CreateUserRequest {
     @JsonProperty("password")
     private String password;
 
-    @Column(name = "photo")
+    @JsonProperty("photo")
     private String photo;
+
 }
