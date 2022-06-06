@@ -10,4 +10,5 @@ import javax.validation.Valid;
 public interface TestimonialApi {
 
     ResponseEntity<Void> createTestimonial(@Valid CreateTestimonialRequest createTestimonialRequest);
+    ResponseEntity<Void> deleteTestimonial(Long id);
 }
