@@ -22,6 +22,6 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     @Transactional
     public void deleteTestimonial(Long id) {
-        testimonialJpaRepository.findById(id).ifPresent(testimonialJpaRepository :: delete);
+        testimonialJpaRepository.findById(id).ifPresent(testimonialJpaRepository::delete);
     }
 }
