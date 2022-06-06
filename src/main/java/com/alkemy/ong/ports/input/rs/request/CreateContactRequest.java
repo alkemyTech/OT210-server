@@ -27,9 +27,4 @@ public class CreateContactRequest {
     private String phone;
     @JsonProperty("message")
     private String message;
-    @JsonProperty("deletedAt")
-    @DateTimeFormat(
-            iso = DateTimeFormat.ISO.DATE_TIME
-    )
-    private LocalDateTime deletedAt;
 }
