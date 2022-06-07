@@ -7,7 +7,7 @@ import com.alkemy.ong.domain.usecase.TestimonialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+
 
 
 @Service
@@ -20,6 +20,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     public Long createEntity(Testimonial testimonial) {
         return testimonialJpaRepository.save(testimonial).getId();
     }
+
 
     @Transactional
     @Override
@@ -37,5 +38,13 @@ public class TestimonialServiceImpl implements TestimonialService {
 
 
         return testimonial1;
+
+    }
+
+    @Override
+    @Transactional
+    public void deleteTestimonial(Long id) {
+        testimonialJpaRepository.findById(id).ifPresent(testimonialJpaRepository::delete);
+
     }
 }

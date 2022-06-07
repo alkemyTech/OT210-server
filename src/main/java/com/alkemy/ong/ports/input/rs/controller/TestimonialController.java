@@ -11,6 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -44,7 +49,7 @@ public class TestimonialController implements TestimonialApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest){
+    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable  Long id, @RequestBody @Valid TestimonialRequest testimonialRequest){
 
         Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
         Testimonial testimonial1 = service.updateIfExists(id ,testimonial);
@@ -52,4 +57,14 @@ public class TestimonialController implements TestimonialApi {
 
         return new ResponseEntity<>(testimonialResponse, HttpStatus.OK);
     }
+
+     @Override
+    @DeleteMapping("/a/{id}")
+    public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id) {
+        service.deleteTestimonial(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+
 }

@@ -1,6 +1,5 @@
 package com.alkemy.ong.ports.input.rs.api;
 
-import com.alkemy.ong.domain.model.Testimonial;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
 import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
@@ -13,5 +12,9 @@ import javax.validation.Valid;
 public interface TestimonialApi {
 
     ResponseEntity<Void> createTestimonial(@Valid CreateTestimonialRequest createTestimonialRequest);
-    ResponseEntity<TestimonialResponse> updateTestimonial(@Valid Long id, TestimonialRequest testimonialRequest);
+
+    ResponseEntity<TestimonialResponse> updateTestimonial( Long id, @Valid TestimonialRequest testimonialRequest);
+
+    ResponseEntity<Void> deleteTestimonial(Long id);
+
 }
