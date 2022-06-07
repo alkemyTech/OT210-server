@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT).hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, ApiConstants.USERS_URI).hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/v1/categories").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET).authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPointHandler())
