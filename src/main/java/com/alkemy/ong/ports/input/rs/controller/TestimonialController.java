@@ -10,9 +10,10 @@ import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,6 @@ import static com.alkemy.ong.ports.input.rs.api.ApiConstants.TESTIMONIALS_URI;
 public class TestimonialController implements TestimonialApi {
 
     private final TestimonialControllerMapper mapper;
-
     private final TestimonialService service;
 
     @Override
@@ -49,22 +49,20 @@ public class TestimonialController implements TestimonialApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable  Long id, @RequestBody @Valid TestimonialRequest testimonialRequest){
+    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest) {
 
         Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
-        Testimonial testimonial1 = service.updateIfExists(id ,testimonial);
-        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResopnse(testimonial1);
+        Testimonial updated = service.updateIfExists(id, testimonial);
+        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResopnse(updated);
 
         return new ResponseEntity<>(testimonialResponse, HttpStatus.OK);
     }
 
-     @Override
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id) {
         service.deleteTestimonial(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
 
 }
