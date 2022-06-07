@@ -59,7 +59,7 @@ public class TestimonialController implements TestimonialApi {
     }
 
      @Override
-    @DeleteMapping("/a/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id) {
         service.deleteTestimonial(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
