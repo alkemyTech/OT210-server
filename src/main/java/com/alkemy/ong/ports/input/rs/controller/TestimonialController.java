@@ -5,18 +5,21 @@ import com.alkemy.ong.domain.usecase.TestimonialService;
 import com.alkemy.ong.ports.input.rs.api.TestimonialApi;
 import com.alkemy.ong.ports.input.rs.mapper.TestimonialControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
+import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
+import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-
 import java.net.URI;
 
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.TESTIMONIALS_URI;
@@ -27,10 +30,10 @@ import static com.alkemy.ong.ports.input.rs.api.ApiConstants.TESTIMONIALS_URI;
 public class TestimonialController implements TestimonialApi {
 
     private final TestimonialControllerMapper mapper;
-
     private final TestimonialService service;
 
     @Override
+    @PostMapping
     public ResponseEntity<Void> createTestimonial(@Valid @RequestBody CreateTestimonialRequest createTestimonialRequest) {
 
         Testimonial testimonial = mapper.createTestimonialRequestToTestimonial(createTestimonialRequest);
@@ -45,11 +48,21 @@ public class TestimonialController implements TestimonialApi {
     }
 
     @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest) {
+
+        Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
+        Testimonial updated = service.updateIfExists(id, testimonial);
+        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResopnse(updated);
+
+        return new ResponseEntity<>(testimonialResponse, HttpStatus.OK);
+    }
+
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestimonial(@PathVariable Long id) {
         service.deleteTestimonial(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 
 }
