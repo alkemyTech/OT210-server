@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userJpaRepository;
 
     private final UserControllerMapperImpl mapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,18 +42,40 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse updateUser(Long id, User user) {
+    public UserResponse updateUser(Long id, User entity) {
+
         try {
-            User userToSave = userJpaRepository.getById(id);
+            User userToUpdate = userJpaRepository.getById(id);
 
-            userToSave.setFirstName(user.getFirstName());
-            userToSave.setLastName(user.getLastName());
-            userToSave.setEmail(user.getEmail());
-            userToSave.setPassword(user.getPassword());
-            userToSave.setPhoto(user.getPhoto());
+            if (entity.getFirstName() != null) {
+                userToUpdate.setFirstName(entity.getFirstName());
+            } else {
+                userToUpdate.setFirstName(userToUpdate.getFirstName());
+            }
+            if (entity.getLastName() != null) {
+                userToUpdate.setLastName(entity.getLastName());
+            } else {
+                userToUpdate.setLastName(userToUpdate.getLastName());
+            }
+            if (entity.getEmail() != null) {
+                userToUpdate.setEmail(entity.getEmail());
+            } else {
+                userToUpdate.setEmail(userToUpdate.getEmail());
+            }
+            if (entity.getPassword() != null) {
+                userToUpdate.setPassword(passwordEncoder.encode(entity.getPassword()));
+            } else {
+                userToUpdate.setPassword(userToUpdate.getPassword());
+            }
+            if (entity.getPhoto() != null) {
+                userToUpdate.setPhoto(entity.getPhoto());
+            } else {
+                userToUpdate.setPhoto(userToUpdate.getPhoto());
+            }
 
-            userJpaRepository.save(userToSave);
-            return mapper.userToUserResponse(userToSave);
+            userJpaRepository.save(userToUpdate);
+            return mapper.userToUserResponse(userToUpdate);
+
         } catch (Exception exception) {
             throw new NotFoundException(id);
         }

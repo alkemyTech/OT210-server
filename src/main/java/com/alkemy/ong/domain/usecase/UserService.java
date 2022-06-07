@@ -9,5 +9,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserService extends UserDetailsService {
     UserList getList(PageRequest pageRequest);
 
-    UserResponse updateUser(Long id, User user);
+    UserResponse updateUser(Long id, User entity);
 }
