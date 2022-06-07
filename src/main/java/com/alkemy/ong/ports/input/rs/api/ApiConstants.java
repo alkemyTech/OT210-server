@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public interface ApiConstants {
 
-    String AUTHENTICATION_URI= "auth";
+    String AUTHENTICATION_URI= "/auth";
     String ALKYMERS_URI = "/v1/alkymers";
     String USERS_URI = "/v1/users";
     String ORGANIZATIONS_URI = "/v1/organizations";
