@@ -3,6 +3,7 @@ package com.alkemy.ong.configuration;
 import com.alkemy.ong.common.exception.handler.AuthenticationEntryPointHandler;
 import com.alkemy.ong.common.exception.handler.CustomAccessDeniedHandler;
 import com.alkemy.ong.common.security.JwtRequestFilter;
+import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,11 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/api/docs/**", "/api/swagger-ui/**", "/v3/api-docs/**", "/auth/login", "/auth/register").permitAll()
+                .antMatchers(HttpMethod.POST, ApiConstants.CONTACTS_URI).permitAll()
                 .antMatchers(HttpMethod.POST).hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH).hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT).hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/v1/users").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, ApiConstants.USERS_URI).hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET).authenticated()
                 .and().exceptionHandling()
                 .authenticationEntryPoint(new AuthenticationEntryPointHandler())

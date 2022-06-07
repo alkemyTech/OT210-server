@@ -33,6 +33,9 @@ public class Contact implements Auditable {
     private String name;
 
     @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String phone;
 
     private String message;
