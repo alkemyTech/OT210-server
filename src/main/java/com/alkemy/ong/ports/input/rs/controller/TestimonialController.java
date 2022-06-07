@@ -28,6 +28,7 @@ public class TestimonialController implements TestimonialApi {
     private final TestimonialService service;
 
     @Override
+    @PostMapping
     public ResponseEntity<Void> createTestimonial(@Valid @RequestBody CreateTestimonialRequest createTestimonialRequest) {
 
         Testimonial testimonial = mapper.createTestimonialRequestToTestimonial(createTestimonialRequest);
