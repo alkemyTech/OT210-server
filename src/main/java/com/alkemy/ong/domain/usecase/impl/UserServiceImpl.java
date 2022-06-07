@@ -16,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -44,34 +47,36 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse updateUser(Long id, User entity) {
 
+        /*User user = userJpaRepository.findById(id)
+                .map(userJpa -> {
+                    Optional.ofNullable(entity.getFirstName()).ifPresent(userJpa::setFirstName);
+                    Optional.ofNullable(entity.getLastName()).ifPresent(userJpa::setLastName);
+                    Optional.ofNullable(entity.getEmail()).ifPresent(userJpa::setEmail);
+                    Optional.ofNullable(entity.getPassword()).ifPresent(userJpa::setPassword);
+                    Optional.ofNullable(entity.getPhoto()).ifPresent(userJpa::setPhoto);
+                    return userJpaRepository.save(userJpa);
+                }).orElseThrow(() -> new NotFoundException(id));
+        return mapper.userToUserResponse(user);*/
+
         try {
             User userToUpdate = userJpaRepository.getById(id);
 
             if (entity.getFirstName() != null) {
                 userToUpdate.setFirstName(entity.getFirstName());
-            } else {
-                userToUpdate.setFirstName(userToUpdate.getFirstName());
             }
             if (entity.getLastName() != null) {
                 userToUpdate.setLastName(entity.getLastName());
-            } else {
-                userToUpdate.setLastName(userToUpdate.getLastName());
             }
             if (entity.getEmail() != null) {
                 userToUpdate.setEmail(entity.getEmail());
-            } else {
-                userToUpdate.setEmail(userToUpdate.getEmail());
             }
             if (entity.getPassword() != null) {
                 userToUpdate.setPassword(passwordEncoder.encode(entity.getPassword()));
-            } else {
-                userToUpdate.setPassword(userToUpdate.getPassword());
             }
             if (entity.getPhoto() != null) {
                 userToUpdate.setPhoto(entity.getPhoto());
-            } else {
-                userToUpdate.setPhoto(userToUpdate.getPhoto());
             }
+            userToUpdate.getAudit().setUpdatedAt(LocalDateTime.now());
 
             userJpaRepository.save(userToUpdate);
             return mapper.userToUserResponse(userToUpdate);
