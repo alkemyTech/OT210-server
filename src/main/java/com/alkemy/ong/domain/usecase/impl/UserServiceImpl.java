@@ -1,8 +1,11 @@
 package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.ConflictException;
+import com.alkemy.ong.common.exception.NotFoundException;
+import com.alkemy.ong.domain.model.Role;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.model.UserList;
+import com.alkemy.ong.domain.repository.RoleRepository;
 import com.alkemy.ong.domain.repository.UserRepository;
 import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.domain.usecase.UserService;
@@ -17,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -24,9 +29,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userJpaRepository;
     private final EmailService emailService;
     private final OrganizationService organizationService;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    @Value("${main.organization.id}")
-    private Long id;
+    @Value("${default.organization.id}")
+    private Long defaultOrganizationId;
+    @Value("${default.role.id}")
+    private Long defaultRoleId;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +47,17 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserList getList(PageRequest pageRequest) {
         Page<User> page = userJpaRepository.findAll(pageRequest);
-        return new UserList(page.getContent(),pageRequest,page.getTotalElements());
+        return new UserList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long id) {
+        Optional<User> optional = userJpaRepository.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            userJpaRepository.delete(user);
+        }
     }
 
     @Override
@@ -53,14 +71,24 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(getRoleIfExists(defaultRoleId));
 
-        emailService.sendWelcomeEmail(user.getEmail(), organizationService.getByIdIfExists(id));
+        emailService.sendWelcomeEmail(
+                user.getEmail(), organizationService.getByIdIfExists(defaultOrganizationId));
 
         return userJpaRepository.save(user);
     }
+
+
+    private Role getRoleIfExists(Long roleId) {
+        return roleRepository.findById(roleId)
+                .orElseThrow(() -> new NotFoundException(roleId));
+    }
+
 
     private boolean emailExists(String email) {
         return userJpaRepository.findByEmail(email)
                 .isPresent();
     }
+
 }

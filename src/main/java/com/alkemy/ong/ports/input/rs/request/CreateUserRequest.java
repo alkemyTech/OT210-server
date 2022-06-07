@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -16,11 +17,11 @@ import javax.validation.constraints.NotBlank;
 public class CreateUserRequest {
 
     @NotBlank
-    @JsonProperty("firstName")
+    @JsonProperty("first_name")
     private String firstName;
 
     @NotBlank
-    @JsonProperty("lastName")
+    @JsonProperty("last_name")
     private String lastName;
 
     @Email
@@ -28,6 +29,7 @@ public class CreateUserRequest {
     private String email;
 
     @NotBlank
+    @Size(min = 8, max = 16)
     @JsonProperty("password")
     private String password;
 

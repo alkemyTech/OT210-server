@@ -5,22 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCategoryRequest {
+public class CreateContactRequest {
 
     @NotBlank
     @JsonProperty("name")
     private String name;
-
-    @JsonProperty("description")
-    private String description;
-
-    @JsonProperty("image")
-    private String image;
-
+    @NotBlank
+    @JsonProperty("email")
+    private String email;
+    @JsonProperty("phone")
+    private String phone;
+    @JsonProperty("message")
+    private String message;
 }
