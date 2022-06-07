@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +26,9 @@ public class ActivityServiceImpl implements ActivityService {
     public void updateEntityIfExists(Long id, Activity activity) {
         activityJpaRepository.findById(id)
                 .map(activityJpa -> {
-                    Optional.ofNullable(activity.getName()).ifPresent(activityJpa::setName);
-                    Optional.ofNullable(activity.getContent()).ifPresent(activityJpa::setContent);
-                    Optional.ofNullable(activity.getImage()).ifPresent(activityJpa::setImage);
-
+                    activityJpa.setName(activity.getName());
+                    activityJpa.setContent(activity.getContent());
+                    activityJpa.setImage(activity.getImage());
                     return activityJpaRepository.save(activityJpa);
                 }).orElseThrow(() -> new NotFoundException(id));
     }
