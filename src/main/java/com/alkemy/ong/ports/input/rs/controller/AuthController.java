@@ -2,9 +2,11 @@ package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.common.security.JwtUtils;
 import com.alkemy.ong.domain.model.User;
+import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
+import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.nio.file.AccessDeniedException;
 
 @RestController
@@ -32,6 +36,7 @@ public class AuthController {
     private final UserControllerMapper userMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final UserService userService;
 
 
     @GetMapping("/me")
@@ -58,4 +63,23 @@ public class AuthController {
         }
         throw new AccessDeniedException("error in the authentication process");
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> registerNewUser(@Valid @RequestBody CreateUserRequest userRequest) {
+
+        User user = userMapper.createUserRequestToUser(userRequest);
+
+        user = userService.registerNewUser(user);
+        UserResponse response = userMapper.userToUserResponse(user);
+        final long id = user.getId();
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(id)
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(response);
+
+    }
+
 }
