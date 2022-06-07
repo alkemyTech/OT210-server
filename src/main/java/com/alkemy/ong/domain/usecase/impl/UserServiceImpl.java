@@ -1,8 +1,11 @@
 package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.ConflictException;
+import com.alkemy.ong.common.exception.NotFoundException;
+import com.alkemy.ong.domain.model.Role;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.model.UserList;
+import com.alkemy.ong.domain.repository.RoleRepository;
 import com.alkemy.ong.domain.repository.UserRepository;
 import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.domain.usecase.UserService;
@@ -24,9 +27,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userJpaRepository;
     private final EmailService emailService;
     private final OrganizationService organizationService;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    @Value("${main.organization.id}")
-    private Long id;
+    @Value("${default.organization.id}")
+    private Long defaultOrganizationId;
+    @Value("${default.role.id}")
+    private Long defaultRoleId;
 
     @Override
     @Transactional(readOnly = true)
@@ -53,10 +59,17 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(getRoleIfExists(defaultRoleId));
 
-        emailService.sendWelcomeEmail(user.getEmail(), organizationService.getByIdIfExists(id));
+        emailService.sendWelcomeEmail(
+                user.getEmail(), organizationService.getByIdIfExists(defaultOrganizationId));
 
         return userJpaRepository.save(user);
+    }
+
+    private Role getRoleIfExists(Long roleId) {
+        return roleRepository.findById(roleId)
+                .orElseThrow(() -> new NotFoundException(roleId));
     }
 
     private boolean emailExists(String email) {
