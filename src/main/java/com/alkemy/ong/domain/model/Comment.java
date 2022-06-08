@@ -43,8 +43,8 @@ public class Comment implements Auditable {
     @Embedded
     private Audit audit;
 
-    @ManyToOne
-    @JoinColumn(name = "new_id", referencedColumnName = "new_id", table = "new", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "new_id", referencedColumnName = "new_id", nullable = false)
     @ToString.Exclude
     private New aNew;
 
@@ -60,7 +60,6 @@ public class Comment implements Auditable {
         Comment comment = (Comment) o;
         return Objects.equals(id, comment.id);
     }
-
 
     @Override
     public int hashCode() {
