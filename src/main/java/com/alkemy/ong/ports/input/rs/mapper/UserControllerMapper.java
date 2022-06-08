@@ -31,5 +31,5 @@ public interface UserControllerMapper extends CommonMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "photo", source = "photo")
-    User updateUserRequestToUser(UpdateUserRequest updateUserRequest);
+    User updateUserRequestToUser(UpdateUserRequest userRequest);
 }

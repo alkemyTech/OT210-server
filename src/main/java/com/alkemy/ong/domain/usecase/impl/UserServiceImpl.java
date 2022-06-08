@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,17 +45,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse updateUser(Long id, User entity) {
-
-        /*User user = userJpaRepository.findById(id)
-                .map(userJpa -> {
-                    Optional.ofNullable(entity.getFirstName()).ifPresent(userJpa::setFirstName);
-                    Optional.ofNullable(entity.getLastName()).ifPresent(userJpa::setLastName);
-                    Optional.ofNullable(entity.getEmail()).ifPresent(userJpa::setEmail);
-                    Optional.ofNullable(entity.getPassword()).ifPresent(userJpa::setPassword);
-                    Optional.ofNullable(entity.getPhoto()).ifPresent(userJpa::setPhoto);
-                    return userJpaRepository.save(userJpa);
-                }).orElseThrow(() -> new NotFoundException(id));
-        return mapper.userToUserResponse(user);*/
 
         try {
             User userToUpdate = userJpaRepository.getById(id);

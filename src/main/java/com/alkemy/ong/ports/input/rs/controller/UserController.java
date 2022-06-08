@@ -66,15 +66,13 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().body(response);
     }
 
-
     @Override
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
-                                                   @RequestBody UpdateUserRequest updateUserRequest) {
+                                                   @RequestBody UpdateUserRequest userRequest) {
 
-        User toEntity = mapper.updateUserRequestToUser(updateUserRequest);
+        User toEntity = mapper.updateUserRequestToUser(userRequest);
         UserResponse userResponse = service.updateUser(id, toEntity);
         return ResponseEntity.ok().body(userResponse);
-
     }
 }
