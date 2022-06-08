@@ -25,6 +25,12 @@ public class SendGridEmailService implements EmailService {
     @Value("${email.welcomeSubject}")
     private String welcomeSubject;
 
+    @Value("${email.contactSubject}")
+    private String contactSubject;
+
+    @Value("${email.text}")
+    private String textEmail;
+
     @Value("${email.sendgrid.template}")
     private String templateId;
 
@@ -57,7 +63,26 @@ public class SendGridEmailService implements EmailService {
         mail.setReplyTo(replyTo);
 
         Email userEmail = new Email(to);
-        Personalization personalization = personalization(userEmail, organization);
+        Personalization personalization = personalization(userEmail, organization,textEmail);
+        mail.addPersonalization(personalization);
+
+        send(mail);
+    }
+
+    @Override
+    public void sendContactEmail(String to, Organization organization) {
+        Mail mail = new Mail();
+        mail.setSubject(this.contactSubject);
+        mail.setTemplateId(this.templateId);
+
+        Email from = new Email(organization.getEmail());
+        mail.setFrom(from);
+
+        Email replyTo = new Email(NO_REPLY_SOMOSMAS_ORG);
+        mail.setReplyTo(replyTo);
+
+        Email userEmail = new Email(to);
+        Personalization personalization = personalization(userEmail, organization,organization.getWelcomeText());
         mail.addPersonalization(personalization);
 
         send(mail);
@@ -76,13 +101,13 @@ public class SendGridEmailService implements EmailService {
         }
     }
 
-    private Personalization personalization(Email userEmail, Organization organization) {
+    private Personalization personalization(Email userEmail, Organization organization,String  text) {
         Personalization personalization;
         personalization = new Personalization();
         personalization.addTo(userEmail);
         personalization.addDynamicTemplateData("image", organization.getImage());
         personalization.addDynamicTemplateData("name", organization.getName());
-        personalization.addDynamicTemplateData("welcome_text", organization.getWelcomeText());
+        personalization.addDynamicTemplateData("text", text);
         personalization.addDynamicTemplateData("email", organization.getEmail());
         personalization.addDynamicTemplateData("phone", organization.getPhone());
         personalization.addDynamicTemplateData("linkedin", organization.getLinkedinContact());
