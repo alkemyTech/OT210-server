@@ -28,7 +28,7 @@ public final class GlobalExceptionHandler extends AbstractExceptionHandler {
 
         ErrorDetails error = ErrorDetails.builder()
                 .code(ErrorCode.RESOURCE_ALREADY_EXISTS)
-                .detail("The resource %s already exists.".formatted(ex.getResourceName()))
+                .detail(ex.getErrorMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);

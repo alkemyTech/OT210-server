@@ -18,12 +18,11 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Where(clause = "is_active=true")
-@SQLDelete(sql = "UPDATE news SET i@EntityListeners(AuditListener.class)s_active=false WHERE news_id=?")
+@SQLDelete(sql = "UPDATE new SET is_active=false WHERE new_id=?")
 @Entity
 @Table(name = "new")
 @EntityListeners(AuditListener.class)
 public class New implements Auditable  {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,11 +41,16 @@ public class New implements Auditable  {
     @Embedded
     private Audit audit;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @ToString.Exclude
+    private Category category;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-       New aNew = (New) o;
+        New aNew = (New) o;
         return Objects.equals(id, aNew.id);
     }
 

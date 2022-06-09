@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ConflictException extends RuntimeException {
-	private final String resourceName;
+	private final String errorMessage;
 }
