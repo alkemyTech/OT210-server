@@ -54,6 +54,7 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
+    @GetMapping
     public ResponseEntity<CategoryResponseList> getCategories(Optional<Integer> page, Optional<Integer> size) {
         final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
         final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
