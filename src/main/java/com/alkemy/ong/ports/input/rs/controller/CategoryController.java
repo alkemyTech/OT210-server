@@ -3,6 +3,7 @@ package com.alkemy.ong.ports.input.rs.controller;
 import com.alkemy.ong.domain.usecase.CategoryService;
 import com.alkemy.ong.ports.input.rs.api.CategoryApi;
 import com.alkemy.ong.ports.input.rs.mapper.CategoryControllerMapper;
+import com.alkemy.ong.ports.input.rs.response.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,14 @@ public class CategoryController implements CategoryApi {
     public ResponseEntity<Void> deleteCategory(@NotNull @PathVariable Long id) {
         service.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> getCategory(@NotNull @PathVariable Long id) {
+        Category category = service.getByIdIfExists(id);
+        CategoryResponse response = mapper.categoryToCategoryResponse(category);
+        return ResponseEntity.ok(response);
     }
 
 }
