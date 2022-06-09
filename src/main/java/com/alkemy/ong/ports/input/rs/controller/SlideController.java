@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.constraints.NotNull;
-
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.SLIDES_URI;
 
 
