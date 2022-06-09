@@ -11,6 +11,6 @@ public interface SlideControllerMapper  extends CommonMapper{
     @Mapping(target = "image", source = "imageUrl")
     @Mapping(target = "text", source = "text")
     @Mapping(target = "order",source = "order")
-    @Mapping(target = "organization", source = "organization")
+    @Mapping(target = "organizationResponse", source = "organization")
     SlideResponse slideToSlideResponse(Slide slide);
 }
