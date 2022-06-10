@@ -1,5 +1,4 @@
-package com.alkemy.ong.ports.input.rs.response;
-
+package com.alkemy.ong.ports.input.rs.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -9,16 +8,20 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestimonialResponse {
+public class TestimonialRequest {
 
-
+    @NotBlank
+    @JsonProperty("name")
     private String name;
-    private String image;
-    private String content;
 
+    @JsonProperty("image")
+    private String image;
+
+    @NotBlank
+    @JsonProperty("content")
+    private String content;
 }

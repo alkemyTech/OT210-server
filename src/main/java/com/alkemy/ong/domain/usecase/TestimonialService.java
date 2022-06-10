@@ -5,8 +5,8 @@ import com.alkemy.ong.domain.model.TestimonialList;
 import org.springframework.data.domain.PageRequest;
 
 public interface TestimonialService {
-
     Long createEntity(Testimonial testimonial);
+    Testimonial updateIfExists(Long id, Testimonial testimonial);
     void deleteTestimonial(Long id);
     TestimonialList getList(PageRequest pageRequest);
 }

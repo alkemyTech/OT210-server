@@ -6,14 +6,13 @@ import com.alkemy.ong.ports.input.rs.api.ActivityApi;
 import com.alkemy.ong.ports.input.rs.mapper.ActivityControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateActivityRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.net.URI;
 
@@ -40,5 +39,13 @@ public class ActivityController implements ActivityApi {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateActivity(@NotNull @PathVariable Long id, @Valid @RequestBody CreateActivityRequest createActivityRequest) {
+        Activity activity = mapper.createActivityRequestToActivity(createActivityRequest);
+        activityService.updateEntityIfExists(id, activity);
     }
 }

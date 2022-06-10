@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
+import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
+import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 
@@ -17,6 +19,9 @@ import java.util.Optional;
 public interface TestimonialApi {
 
     ResponseEntity<Void> createTestimonial(@Valid CreateTestimonialRequest createTestimonialRequest);
+
+    ResponseEntity<TestimonialResponse> updateTestimonial( Long id, @Valid TestimonialRequest testimonialRequest);
+
     ResponseEntity<Void> deleteTestimonial(Long id);
 
     @Operation(summary = "Get Testimonial List", description = "Get Testimonial List", responses = {
