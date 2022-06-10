@@ -79,12 +79,10 @@ public class UserServiceImpl implements UserService {
         return userJpaRepository.save(user);
     }
 
-
     private Role getRoleIfExists(Long roleId) {
         return roleRepository.findById(roleId)
                 .orElseThrow(() -> new NotFoundException(roleId));
     }
-
 
     private boolean emailExists(String email) {
         return userJpaRepository.findByEmail(email)

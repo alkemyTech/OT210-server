@@ -11,6 +11,7 @@ import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserAndAuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request) throws AccessDeniedException {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request) {
 
         AuthenticationResponse response =
                 prepareAuthenticationResponse(request.username(), request.password());
@@ -56,8 +57,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserAndAuthenticationResponse> registerNewUser(
-            @Valid @RequestBody CreateUserRequest userRequest) throws AccessDeniedException {
+    public ResponseEntity<UserAndAuthenticationResponse> registerNewUser(@Valid @RequestBody CreateUserRequest userRequest) {
 
         User user = userMapper.createUserRequestToUser(userRequest);
         user = userService.registerNewUser(user);
@@ -79,8 +79,9 @@ public class AuthController {
 
     }
 
+    @SneakyThrows
     private AuthenticationResponse prepareAuthenticationResponse(
-            String username, String password) throws AccessDeniedException {
+            String username, String password) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password));
