@@ -8,13 +8,14 @@ import com.alkemy.ong.ports.input.rs.request.CreateContactRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
-import static com.alkemy.ong.ports.input.rs.api.ApiConstants.ALKYMERS_URI;
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.CONTACTS_URI;
 
 @RestController
@@ -25,10 +26,9 @@ public class ContactController  implements ContactApi {
     private final ContactService service;
     private final ContactControllerMapper mapper;
 
-
     @Override
     @PostMapping
-    public ResponseEntity<Void> createContact(CreateContactRequest createContactRequest) {
+    public ResponseEntity<Void> createContact(@Valid @RequestBody CreateContactRequest createContactRequest) {
 
         Contact contact = mapper.createContactRequestToContact(createContactRequest);
         final long id = service.createEntity(contact);
