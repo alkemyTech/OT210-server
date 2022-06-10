@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactJpaRepository;
-
     private final OrganizationService organizationService;
     private final EmailService emailService;
 
