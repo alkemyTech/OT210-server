@@ -5,7 +5,7 @@ import com.alkemy.ong.domain.model.UserList;
 import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.UserApi;
-import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
+import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapperImpl;
 import com.alkemy.ong.ports.input.rs.request.UpdateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponseList;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,7 @@ public class UserController implements UserApi {
 
     private final UserService service;
 
-    private final UserControllerMapper mapper;
+    private final UserControllerMapperImpl mapper;
 
     @Override
     @GetMapping
@@ -69,10 +70,11 @@ public class UserController implements UserApi {
     @Override
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
-                                                   @RequestBody UpdateUserRequest userRequest) {
+                                                   @Valid @RequestBody UpdateUserRequest userRequest) {
 
         User toEntity = mapper.updateUserRequestToUser(userRequest);
-        UserResponse userResponse = service.updateUser(id, toEntity);
+        User userToUpdate = service.updateUser(id, toEntity);
+        UserResponse userResponse = mapper.userToUserResponse(userToUpdate);
         return ResponseEntity.ok().body(userResponse);
     }
 }

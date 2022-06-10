@@ -5,8 +5,6 @@ import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.model.UserList;
 import com.alkemy.ong.domain.repository.UserRepository;
 import com.alkemy.ong.domain.usecase.UserService;
-import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapperImpl;
-import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,14 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userJpaRepository;
-
-    private final UserControllerMapperImpl mapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -44,10 +41,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse updateUser(Long id, User entity) {
+    public User updateUser(Long id, User entity) {
 
-        try {
-            User userToUpdate = userJpaRepository.getById(id);
+        Optional<User> userOptional = userJpaRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User userToUpdate = new User();
 
             if (entity.getFirstName() != null) {
                 userToUpdate.setFirstName(entity.getFirstName());
@@ -67,9 +65,8 @@ public class UserServiceImpl implements UserService {
             userToUpdate.getAudit().setUpdatedAt(LocalDateTime.now());
 
             userJpaRepository.save(userToUpdate);
-            return mapper.userToUserResponse(userToUpdate);
-
-        } catch (Exception exception) {
+            return userToUpdate;
+        } else {
             throw new NotFoundException(id);
         }
     }
