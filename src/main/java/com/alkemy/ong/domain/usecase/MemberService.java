@@ -9,4 +9,6 @@ public interface MemberService {
     Long createEntity(Member entity);
 
     MemberList getList(PageRequest pageRequest);
+
+    void deleteMember(Long id);
 }

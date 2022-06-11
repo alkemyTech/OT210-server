@@ -11,8 +11,11 @@ import com.alkemy.ong.ports.input.rs.response.MemberResponse;
 import com.alkemy.ong.ports.input.rs.response.MemberResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -77,4 +81,11 @@ public class MemberController implements MemberApi {
         }
         return ResponseEntity.ok().body(responseList);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMember(@NotNull @PathVariable Long id) {
+        service.deleteMember(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
+
