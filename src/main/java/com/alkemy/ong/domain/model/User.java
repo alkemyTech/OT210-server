@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -40,7 +39,6 @@ public class User implements Auditable, UserDetails {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Email
     @Column(name = "email", nullable = false, unique = true, updatable = false)
     private String email;
 
@@ -82,10 +80,6 @@ public class User implements Auditable, UserDetails {
     @Override
     public String getUsername() {
         return this.getEmail();
-    }
-
-    public void setUsername(String username) {
-        this.email = username;
     }
 
     @Override

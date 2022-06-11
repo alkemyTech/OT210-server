@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -62,7 +61,6 @@ public class UserServiceImpl implements UserService {
             if (entity.getPhoto() != null) {
                 userToUpdate.setPhoto(entity.getPhoto());
             }
-            userToUpdate.getAudit().setUpdatedAt(LocalDateTime.now());
 
             userJpaRepository.save(userToUpdate);
             return userToUpdate;

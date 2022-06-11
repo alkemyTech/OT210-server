@@ -5,7 +5,7 @@ import com.alkemy.ong.domain.model.UserList;
 import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.UserApi;
-import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapperImpl;
+import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.UpdateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponseList;
@@ -34,7 +34,7 @@ public class UserController implements UserApi {
 
     private final UserService service;
 
-    private final UserControllerMapperImpl mapper;
+    private final UserControllerMapper mapper;
 
     @Override
     @GetMapping
