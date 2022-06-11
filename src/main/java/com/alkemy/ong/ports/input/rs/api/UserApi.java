@@ -3,6 +3,7 @@ package com.alkemy.ong.ports.input.rs.api;
 import com.alkemy.ong.ports.input.rs.request.UpdateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponseList;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+@SecurityRequirement(name = "bearerAuth")
 @Validated
 public interface UserApi {
 

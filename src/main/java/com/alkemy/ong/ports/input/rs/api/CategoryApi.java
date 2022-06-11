@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.input.rs.api;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import com.alkemy.ong.ports.input.rs.request.CreateCategoryRequest;
 import com.alkemy.ong.ports.input.rs.response.CategoryResponse;
 import com.alkemy.ong.ports.input.rs.response.CategoryResponseList;
@@ -10,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+@SecurityRequirement(name = "bearerAuth")
 @Validated
 public interface CategoryApi {
 
