@@ -7,6 +7,8 @@ import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper
 public interface TestimonialControllerMapper extends CommonMapper {
 
@@ -19,4 +21,5 @@ public interface TestimonialControllerMapper extends CommonMapper {
 
     Testimonial createTestimonialRequestToTestimonial(CreateTestimonialRequest create);
 
+    List<TestimonialResponse> testimonialListToTestimonialResponseList(List<Testimonial> list);
 }
