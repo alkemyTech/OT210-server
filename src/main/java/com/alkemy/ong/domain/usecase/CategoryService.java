@@ -7,7 +7,13 @@ import org.springframework.data.domain.PageRequest;
 public interface CategoryService {
 
     Long createEntity(Category category);
+
     void deleteCategory(Long id);
+
     CategoryList getList(PageRequest pageRequest);
+
+    Category getByIdIfExists(Long id);
+
+    void updateCategoryIfExists(Long id, Category category);
 
 }

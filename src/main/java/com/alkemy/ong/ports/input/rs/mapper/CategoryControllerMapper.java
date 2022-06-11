@@ -11,7 +11,9 @@ import java.util.List;
 public interface CategoryControllerMapper extends CommonMapper {
 
     Category createCategoryRequestToCategory(CreateCategoryRequest create);
+
     List<CategoryResponse> categoryListToCategoryResponseList(List<Category> categories);
+
     CategoryResponse categoryToCategoryResponse(Category category);
 
 }

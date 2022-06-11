@@ -1,5 +1,6 @@
 package com.alkemy.ong.domain.usecase.impl;
 
+import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Category;
 import com.alkemy.ong.domain.model.CategoryList;
 import com.alkemy.ong.domain.repository.CategoryRepository;
@@ -33,6 +34,23 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryList getList(PageRequest pageRequest) {
         Page<Category> page = categoryJpaRepository.findAll(pageRequest);
         return new CategoryList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    @Transactional(readOnly = true)
+    public Category getByIdIfExists(Long id) {
+        return categoryJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    @Transactional
+    public void updateCategoryIfExists(Long id, Category category) {
+        categoryJpaRepository.findById(id)
+                .map(categoryJpa -> {
+                    categoryJpa.setName(category.getName());
+                    categoryJpa.setDescription(category.getDescription());
+                    categoryJpa.setImage(category.getImage());
+
+                    return categoryJpaRepository.save(categoryJpa);
+                }).orElseThrow(() -> new NotFoundException(id));
     }
 
 }
