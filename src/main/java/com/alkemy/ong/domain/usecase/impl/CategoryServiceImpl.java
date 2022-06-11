@@ -32,4 +32,16 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
+    @Transactional
+    public void updateCategoryIfExists(Long id, Category category) {
+        categoryJpaRepository.findById(id)
+                .map(categoryJpa -> {
+                    categoryJpa.setName(category.getName());
+                    categoryJpa.setDescription(category.getDescription());
+                    categoryJpa.setImage(category.getImage());
+
+                    return categoryJpaRepository.save(categoryJpa);
+                }).orElseThrow(() -> new NotFoundException(id));
+    }
+
 }
