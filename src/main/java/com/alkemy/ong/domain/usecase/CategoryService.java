@@ -6,5 +6,6 @@ public interface CategoryService {
 
     Long createEntity(Category category);
     void deleteCategory(Long id);
+    void updateCategoryIfExists(Long id, Category category);
 
 }

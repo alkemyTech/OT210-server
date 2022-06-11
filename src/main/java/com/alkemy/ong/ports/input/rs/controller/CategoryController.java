@@ -45,4 +45,12 @@ public class CategoryController implements CategoryApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Override
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCategory(@NotNull @PathVariable Long id, @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
+        Category category = mapper.createCategoryRequestToCategory(createCategoryRequest);
+        service.updateCategoryIfExists(id, category);
+    }
+
 }

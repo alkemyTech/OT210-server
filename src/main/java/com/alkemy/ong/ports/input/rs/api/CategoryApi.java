@@ -11,5 +11,6 @@ public interface CategoryApi {
 
     ResponseEntity<Void> createCategory(@Valid CreateCategoryRequest createCategoryRequest);
     ResponseEntity<Void> deleteCategory(@NotNull Long id);
+    void updateCategory(@NotNull Long id, @Valid CreateCategoryRequest createCategoryRequest);
 
 }
