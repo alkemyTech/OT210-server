@@ -9,6 +9,8 @@ import com.alkemy.ong.domain.usecase.NewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +20,11 @@ public class NewServiceImpl implements NewService {
 
     private final CategoryRepository categoryJpaRepository;
 
-    @Value("${default.role.id}")
+    @Value("${default.category.id}")
     private Long defaultCategoryId;
 
     @Override
+    @Transactional(readOnly = true)
     public Long createNew(New entity) {
         entity.setCategory(getCategoryIfExists(defaultCategoryId));
         return newJpaRepository.save(entity).getId();
