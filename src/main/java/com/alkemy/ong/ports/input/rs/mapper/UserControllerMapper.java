@@ -2,6 +2,7 @@ package com.alkemy.ong.ports.input.rs.mapper;
 
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.ports.input.rs.request.UpdateUserRequest;
+import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -15,8 +16,7 @@ public interface UserControllerMapper extends CommonMapper {
 
     @IterableMapping(qualifiedByName = "userToUserResponse")
     List<UserResponse> userListToUserListResponse(List<User> users);
-
-
+    
     @Named("userToUserResponse")
     @Mapping(target = "id", source = "id")
     @Mapping(target = "firstName", source = "firstName")
@@ -32,4 +32,12 @@ public interface UserControllerMapper extends CommonMapper {
     @Mapping(target = "password", source = "password")
     @Mapping(target = "photo", source = "photo")
     User updateUserRequestToUser(UpdateUserRequest userRequest);
+
+    @Named("createUserRequestToUser")
+    @Mapping(target = "firstName", source = "firstName")
+    @Mapping(target = "lastName", source ="lastName")
+    @Mapping(target = "email", source ="email")
+    @Mapping(target = "photo", source ="photo")
+    @Mapping(target = "password", source ="password")
+    User createUserRequestToUser(CreateUserRequest createUserRequest);
 }

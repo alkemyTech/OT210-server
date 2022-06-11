@@ -11,7 +11,9 @@ import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,5 +78,11 @@ public class UserController implements UserApi {
         User userToUpdate = service.updateUser(id, toEntity);
         UserResponse userResponse = mapper.userToUserResponse(userToUpdate);
         return ResponseEntity.ok().body(userResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@NotNull @PathVariable Long id) {
+        service.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

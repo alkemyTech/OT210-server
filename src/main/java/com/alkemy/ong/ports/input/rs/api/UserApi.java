@@ -19,4 +19,8 @@ public interface UserApi {
 
     ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
                                             @Valid @RequestBody UpdateUserRequest updateUserRequest);
+
+    ResponseEntity<Void> deleteUser(@NotNull Long id);
+
 }
+

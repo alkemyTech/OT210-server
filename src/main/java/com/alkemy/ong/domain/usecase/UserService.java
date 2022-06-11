@@ -9,4 +9,8 @@ public interface UserService extends UserDetailsService {
     UserList getList(PageRequest pageRequest);
 
     User updateUser(Long id, User entity);
+
+    User registerNewUser(User user);
+
+    void deleteUser(Long id);
 }
