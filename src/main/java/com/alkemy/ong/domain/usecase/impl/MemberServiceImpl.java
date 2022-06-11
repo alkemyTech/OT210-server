@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -17,5 +19,15 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Long createEntity(Member member) {
         return memberJpaRepository.save(member).getId();
+    }
+
+    @Override
+    @Transactional
+    public void deleteMember(Long id) {
+        Optional<Member> optional = memberJpaRepository.findById(id);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            memberJpaRepository.delete(member);
+        }
     }
 }
