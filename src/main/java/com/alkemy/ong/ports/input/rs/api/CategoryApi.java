@@ -1,7 +1,6 @@
 package com.alkemy.ong.ports.input.rs.api;
 
 import com.alkemy.ong.common.exception.error.ErrorDetails;
-import com.alkemy.ong.ports.input.rs.request.UpdateCategoryRequest;
 import com.alkemy.ong.ports.input.rs.response.CategoryResponse;
 import com.alkemy.ong.ports.input.rs.response.CategoryResponseList;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,12 +11,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import com.alkemy.ong.ports.input.rs.request.CreateCategoryRequest;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+@SecurityRequirement(name = "bearerAuth")
 @Validated
 public interface CategoryApi {
 
@@ -37,6 +39,7 @@ public interface CategoryApi {
                             examples = @ExampleObject(value = "{\"code\":\"ROLE_INVALID\",\"detail\":\"The user does not have access to the current resource\"}"))}),
     })
     ResponseEntity<Void> createCategory(@Valid CreateCategoryRequest createCategoryRequest);
+
 
     @Operation(summary = "Get Category", description = "Get Category", responses = {
             @ApiResponse(responseCode = "200", description = "OK",
@@ -83,7 +86,7 @@ public interface CategoryApi {
                             schema = @Schema(implementation = ErrorDetails.class),
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with id 99 is not found\"}"))}),
     })
-    void updateCategory(@NotNull Long id, @Valid UpdateCategoryRequest updateCategoryRequest);
+    void updateCategory(@NotNull Long id, @Valid CreateCategoryRequest createCategoryRequest);
 
     @Operation(summary = "Delete  Category", description = "Delete  Category", responses = {
             @ApiResponse(responseCode = "204", description = "No Content"),
