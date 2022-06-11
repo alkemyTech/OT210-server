@@ -1,15 +1,12 @@
 package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.NotFoundException;
-import com.alkemy.ong.domain.model.Alkymer;
 import com.alkemy.ong.domain.model.Category;
 import com.alkemy.ong.domain.repository.CategoryRepository;
 import com.alkemy.ong.domain.usecase.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Category getByIdIfExists(Long id) {
+        return categoryJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
     @Transactional
     public void updateCategoryIfExists(Long id, Category category) {
         categoryJpaRepository.findById(id)
