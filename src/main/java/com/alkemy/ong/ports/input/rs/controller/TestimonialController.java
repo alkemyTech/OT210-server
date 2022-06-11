@@ -7,6 +7,7 @@ import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.TestimonialApi;
 import com.alkemy.ong.ports.input.rs.mapper.TestimonialControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
+import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponseList;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +87,7 @@ public class TestimonialController implements TestimonialApi {
             response = new TestimonialResponseList();
 
             List<TestimonialResponse> testimonialResponseList = mapper.
-                                                    testimonialListToTestimonialResponseList(list.getContent());
+                    testimonialListToTestimonialResponseList(list.getContent());
             response.setContent(testimonialResponseList);
 
             final int nextPage = list.getPageable().next().getPageNumber();

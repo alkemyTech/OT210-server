@@ -45,7 +45,7 @@ public class TestimonialServiceImpl implements TestimonialService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public TestimonialList getList(PageRequest pageRequest) {
         Page<Testimonial> page = testimonialJpaRepository.findAll(pageRequest);
         return new TestimonialList(page.getContent(), pageRequest, page.getTotalElements());
