@@ -1,12 +1,16 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.domain.model.Category;
+import com.alkemy.ong.domain.model.CategoryList;
 import com.alkemy.ong.domain.usecase.CategoryService;
+import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.CategoryApi;
 import com.alkemy.ong.ports.input.rs.mapper.CategoryControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateCategoryRequest;
 import com.alkemy.ong.ports.input.rs.response.CategoryResponse;
+import com.alkemy.ong.ports.input.rs.response.CategoryResponseList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +27,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.CATEGORIES_URI;
 
@@ -53,6 +59,32 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
+    @GetMapping
+    public ResponseEntity<CategoryResponseList> getCategories(Optional<Integer> page, Optional<Integer> size) {
+        final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
+        final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
+
+        CategoryList list = service.getList(PageRequest.of(pageNumber, pageSize));
+
+        CategoryResponseList response;
+        {
+            response = new CategoryResponseList();
+
+            List<CategoryResponse> content = mapper.categoryListToCategoryResponseList(list.getContent());
+            response.setContent(content);
+
+            final int nextPage = list.getPageable().next().getPageNumber();
+            response.setNextUri(ApiConstants.uriByPageAsString.apply(nextPage));
+
+            final int previousPage = list.getPageable().previousOrFirst().getPageNumber();
+            response.setPreviousUri(ApiConstants.uriByPageAsString.apply(previousPage));
+
+            response.setTotalPages(list.getTotalPages());
+            response.setTotalElements(list.getTotalElements());
+        }
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategory(@NotNull @PathVariable Long id) {
         Category category = service.getByIdIfExists(id);
