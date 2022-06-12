@@ -24,7 +24,7 @@ public class SlideServiceImpl implements SlideService {
 
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Long createSlide(Slide slide , String fileName) {
 
         Slide slideEntity = new Slide();

@@ -25,7 +25,7 @@ public class SlideController implements SlideApi {
 
 
     @Override
-    @PostMapping("/Slides")
+    @PostMapping
     public ResponseEntity<Void> createSlide(@RequestBody SlideRequest slideRequest, String fileName) {
 
         Slide slide = new Slide();
