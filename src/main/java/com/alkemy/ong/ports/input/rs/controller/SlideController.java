@@ -24,7 +24,7 @@ public class SlideController implements SlideApi {
     private final SlideControllerMapper mapper;
     private final SlideService slideService;
 
-    @GetMapping("/Slides/{id}")
+    @GetMapping("/{id}")
     @Override
     public ResponseEntity<SlideResponse> getById(@PathVariable @NotNull Long id) {
 

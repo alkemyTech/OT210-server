@@ -17,7 +17,7 @@ public class SlideServiceImpl implements SlideService {
     private final SlideRepository slideRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Slide getByIdIfExist(Long id) {
         return slideRepository.findById(id)
                 .orElseThrow(() ->new NotFoundException(id));
