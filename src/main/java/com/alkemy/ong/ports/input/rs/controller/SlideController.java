@@ -30,8 +30,6 @@ public class SlideController implements SlideApi {
 
         Slide slide = slideService.getByIdIfExist(id);
         SlideResponse slideResponse = mapper.slideToSlideResponse(slide);
-
         return new ResponseEntity<>(slideResponse, HttpStatus.OK);
-
     }
 }

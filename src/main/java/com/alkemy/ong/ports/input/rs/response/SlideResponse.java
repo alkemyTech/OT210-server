@@ -14,7 +14,6 @@ public class SlideResponse {
      private String image;
      private String text;
      private Integer order;
-     private OrganizationResponse organizationResponse;
-
+     private OrganizationResponse organization;
 
 }
