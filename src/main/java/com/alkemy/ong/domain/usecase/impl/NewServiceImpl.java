@@ -17,14 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class NewServiceImpl implements NewService {
 
     private final NewRepository newJpaRepository;
-
     private final CategoryRepository categoryJpaRepository;
 
     @Value("${default.category.id}")
     private Long defaultCategoryId;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Long createNew(New entity) {
         entity.setCategory(getCategoryIfExists(defaultCategoryId));
         return newJpaRepository.save(entity).getId();
