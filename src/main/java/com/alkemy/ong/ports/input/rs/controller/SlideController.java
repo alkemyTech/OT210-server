@@ -32,7 +32,7 @@ public class SlideController implements SlideApi {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSlide(@RequestParam @NotNull Long id){
+    public ResponseEntity<Void> deleteSlide(@PathVariable @NotNull Long id){
 
         slideService.deleteSlideByIdIfExist(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
