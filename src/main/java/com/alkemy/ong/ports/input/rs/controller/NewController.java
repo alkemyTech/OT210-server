@@ -11,11 +11,13 @@ import com.alkemy.ong.ports.input.rs.response.NewResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.net.URI;
 import java.util.List;
@@ -67,6 +69,13 @@ public class NewController implements NewApi {
             response.setTotalElements(list.getTotalElements());
         }
         return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNew(@NotNull @PathVariable Long id) {
+        service.deleteById(id);
     }
 
 }
