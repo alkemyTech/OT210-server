@@ -19,6 +19,8 @@ public class SlideServiceImpl implements SlideService {
     private final S3ServiceImpl s3Service;
     private final SlideRepository slideRepository;
 
+    private final String FILE_NAME ="Slide_image";
+
 
 
     @Override
@@ -38,7 +40,7 @@ public class SlideServiceImpl implements SlideService {
            slideEntity.setOrder(order);
        }
 
-        String decodedImage = (s3Service.uploadFile(imgBase64, ));
+        String decodedImage = (s3Service.uploadFile(imgBase64, FILE_NAME));
         slideEntity.setImageUrl(decodedImage);
         slideEntity.setText(text);
 
