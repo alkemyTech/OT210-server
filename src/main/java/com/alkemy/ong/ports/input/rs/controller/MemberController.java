@@ -6,14 +6,15 @@ import com.alkemy.ong.ports.input.rs.api.MemberApi;
 import com.alkemy.ong.ports.input.rs.mapper.MemberControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateMemberRequest;
 import com.alkemy.ong.ports.input.rs.request.UpdateMemberRequest;
-import com.alkemy.ong.ports.input.rs.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,10 +50,10 @@ public class MemberController implements MemberApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<MemberResponse> updateMember(@NotNull @PathVariable Long id,
-                                                       @RequestBody @Valid UpdateMemberRequest updateMemberRequest) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateMember(@NotNull @PathVariable Long id,
+                             @RequestBody @Valid UpdateMemberRequest updateMemberRequest) {
         Member toEntity = mapper.memberRequestToMember(updateMemberRequest);
-        MemberResponse memberResponse = service.updateMember(id, toEntity);
-        return ResponseEntity.ok().body(memberResponse);
+        service.updateMember(id, toEntity);
     }
 }
