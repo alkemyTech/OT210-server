@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class SlideServiceImpl implements SlideService {
@@ -24,30 +22,26 @@ public class SlideServiceImpl implements SlideService {
 
 
     @Override
-    @Transactional(readOnly = true)
-    public Long createSlide(Slide slide , String fileName) {
+    @Transactional
+    public void createSlide(String imgBase64 , String text , Integer order, Long organizationId) {
 
         Slide slideEntity = new Slide();
-        Optional<Organization> organization = Optional.ofNullable((organizationRepository.findById(slide.getOrganization().getId())
-                .orElseThrow(() -> {
-                    return new NotFoundException(slide.getOrganization().getId());
-                })));
 
-        slideEntity.setOrganization(organization.get());
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new NotFoundException(organizationId));
+        slideEntity.setOrganization(organization);
 
         Integer slideListMax = slideRepository.getMaxOrder();
-        if (slide.getOrder() == null) {
-            slideEntity.setOrder(1 + slideListMax);
-        } else if (slide.getOrder() != slideListMax || slide.getOrder() != 0) {
-            slideEntity.setOrder(slide.getOrder());
-        } else if (slideListMax == slide.getOrder()) {
-            slideEntity.setOrder(slideListMax + 1);
-        }
+       if (order == null ||order <= slideListMax){
+           slideEntity.setOrder(slideListMax + 1);
+       } else {
+           slideEntity.setOrder(order);
+       }
 
-        String decodedImage = (s3Service.uploadFile(slide.getImageUrl(),fileName));
+        String decodedImage = (s3Service.uploadFile(imgBase64, ));
         slideEntity.setImageUrl(decodedImage);
-        slideEntity.setText(slide.getText());
+        slideEntity.setText(text);
 
-        return slideRepository.save(slideEntity).getId();
+         slideRepository.save(slideEntity);
     }
 }

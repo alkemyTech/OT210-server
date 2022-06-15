@@ -6,6 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface SlideRepository extends PagingAndSortingRepository<Slide, Long> {
 
-    @Query(nativeQuery = true, value = "SELECT max(orders) FROM slides s")
+    @Query(nativeQuery = true, value = "SELECT max(order) FROM slide s")
     Integer getMaxOrder();
 }

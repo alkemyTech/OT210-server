@@ -4,5 +4,5 @@ import com.alkemy.ong.domain.model.Slide;
 
 public interface SlideService {
 
-    Long createSlide(Slide slide, String fileName);
+    void createSlide(String imgBase64 , String text , Integer order, Long organizationId);
 }
