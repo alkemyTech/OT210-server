@@ -22,5 +22,5 @@ public interface NewApi {
     void deleteNew(@NotNull Long id);
 
     ResponseEntity<NewResponse> updateNew(@NotNull @PathVariable("id") Long id,
-                                           @Valid @RequestBody CreateNewRequest createNewRequest);
+                                          @Valid @RequestBody CreateNewRequest createNewRequest);
 }

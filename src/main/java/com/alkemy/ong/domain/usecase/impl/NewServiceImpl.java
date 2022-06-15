@@ -51,14 +51,13 @@ public class NewServiceImpl implements NewService {
     @Transactional
     public New updateNew(Long id, New entity) {
         Optional<New> newOptional = newJpaRepository.findById(id);
-        New newToUpdate = null;
         if (newOptional.isPresent()) {
-            newToUpdate = newOptional.get();
+            New newToUpdate = newOptional.get();
             newToUpdate.setImage(entity.getImage());
             newToUpdate.setName(entity.getName());
             newToUpdate.setContent(entity.getContent());
             return newJpaRepository.save(newToUpdate);
-        }else{
+        } else {
             throw new NotFoundException(id);
         }
 
