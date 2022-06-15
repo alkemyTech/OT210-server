@@ -10,4 +10,6 @@ public interface NewService {
     Long createNew(New entity);
 
     NewList getList(PageRequest pageRequest);
+
+    void deleteById(Long id);
 }

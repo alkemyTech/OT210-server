@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @Validated
@@ -14,4 +15,6 @@ public interface NewApi {
     ResponseEntity<Void> createNew(@Valid CreateNewRequest createNewRequest);
 
     ResponseEntity<NewResponseList> getNews(Optional<Integer> page, Optional<Integer> size);
+
+    void deleteNew(@NotNull Long id);
 }

@@ -39,6 +39,12 @@ public class NewServiceImpl implements NewService {
         return new NewList(page.getContent(),pageRequest,page.getTotalElements());
     }
 
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+    newJpaRepository.findById(id).ifPresent(newJpaRepository::delete);
+    }
+
     private Category getCategoryIfExists(Long categoryId){
         return  categoryJpaRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(categoryId));
