@@ -12,4 +12,6 @@ public interface NewService {
     NewList getList(PageRequest pageRequest);
 
     void deleteById(Long id);
+
+    New updateNew(Long id,New entity);
 }
