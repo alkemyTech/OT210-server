@@ -9,4 +9,6 @@ public interface EmailService {
 
     void sendWelcomeEmail(String to, Organization organization);
 
+    void sendContactEmail(String to, Organization organization);
+
 }

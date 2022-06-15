@@ -2,14 +2,15 @@ package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Member;
+import com.alkemy.ong.domain.model.MemberList;
 import com.alkemy.ong.domain.repository.MemberRepository;
 import com.alkemy.ong.domain.usecase.MemberService;
-import com.alkemy.ong.ports.input.rs.mapper.MemberControllerMapperImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -37,10 +38,25 @@ public class MemberServiceImpl implements MemberService {
             memberToUpdate.setFacebookUrl(entity.getFacebookUrl());
             memberToUpdate.setInstagramUrl(entity.getInstagramUrl());
             memberToUpdate.setLinkedinUrl(entity.getLinkedinUrl());
-            memberToUpdate.getAudit().setUpdatedAt(LocalDateTime.now());
             memberJpaRepository.save(memberToUpdate);
         } else {
             throw new NotFoundException(id);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public MemberList getList(PageRequest pageRequest) {
+        Page<Member> page = memberJpaRepository.findAll(pageRequest);
+        return new MemberList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    @Override
+    @Transactional
+    public void deleteMember(Long id) {
+        Optional<Member> optional = memberJpaRepository.findById(id);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            memberJpaRepository.delete(member);
         }
     }
 }

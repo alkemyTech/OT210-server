@@ -6,6 +6,8 @@ import com.alkemy.ong.ports.input.rs.request.UpdateMemberRequest;
 import com.alkemy.ong.ports.input.rs.response.MemberResponse;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface MemberControllerMapper extends CommonMapper {
 
@@ -13,5 +15,7 @@ public interface MemberControllerMapper extends CommonMapper {
 
     Member memberRequestToMember(UpdateMemberRequest updateMemberRequest);
 
-    MemberResponse memberToMemberResponse(Member updated);
+    List<MemberResponse> memberListToMemberResponseList(List<Member> members);
+
+    MemberResponse memberToMemberResponse(Member member);
 }

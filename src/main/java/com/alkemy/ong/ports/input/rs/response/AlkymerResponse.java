@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.input.rs.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,11 +24,13 @@ public class AlkymerResponse {
     @DateTimeFormat(
             iso = ISO.DATE_TIME
     )
+    @JsonProperty("start_date")
     private Date startDate;
 
     @DateTimeFormat(
             iso = ISO.DATE_TIME
     )
+    @JsonProperty("end_date")
     private Date endDate;
 
     private List<SkillResponse> skills = null;
