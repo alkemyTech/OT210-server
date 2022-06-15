@@ -50,7 +50,7 @@ public class New implements Auditable  {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-       New aNew = (New) o;
+        New aNew = (New) o;
         return Objects.equals(id, aNew.id);
     }
 

@@ -10,8 +10,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlkymerResponseList {
-    private List<AlkymerResponse> content = null;
+public class NewResponseList {
+
+    private List<NewResponse> content = null;
     @JsonProperty("next_uri")
     private String nextUri;
     @JsonProperty("previous_uri")
