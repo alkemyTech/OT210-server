@@ -23,4 +23,10 @@ public class SlideServiceImpl implements SlideService {
                 .orElseThrow(() ->new NotFoundException(id));
     }
 
+    @Override
+    @Transactional
+    public void deleteSlideByIdIfExist(Long id) {
+        slideRepository.findById(id).ifPresent(slideRepository::delete);
+    }
+
 }
