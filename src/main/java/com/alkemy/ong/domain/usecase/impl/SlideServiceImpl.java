@@ -24,7 +24,7 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteSlideByIdIfExist(Long id) {
         slideRepository.findById(id).ifPresent(slideRepository::delete);
     }
