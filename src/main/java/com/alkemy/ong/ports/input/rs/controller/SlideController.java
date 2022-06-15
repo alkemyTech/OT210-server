@@ -40,7 +40,7 @@ public class SlideController implements SlideApi {
     }
 
     @Override
-    @PostMapping("/Slides")
+    @PostMapping
     public ResponseEntity<Void> createSlide(@RequestBody @Valid SlideRequest slideRequest) {
 
         slideService.createSlide(slideRequest.getImg()
