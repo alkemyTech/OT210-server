@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
-import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -65,7 +64,7 @@ public interface TestimonialApi {
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\"," +
                                     "\"detail\":\"The resource with id 99 is not found\"}"))}),
     })
-    ResponseEntity<TestimonialResponse> updateTestimonial( Long id, @Valid TestimonialRequest testimonialRequest);
+    void updateTestimonial( Long id, @Valid TestimonialRequest testimonialRequest);
 
     @Operation(summary = "Delete Testimonial", description = "Delete Testimonial", responses = {
             @ApiResponse(responseCode = "204", description = "No Content"),
