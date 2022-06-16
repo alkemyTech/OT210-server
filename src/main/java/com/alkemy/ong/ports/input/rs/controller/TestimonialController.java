@@ -58,7 +58,6 @@ public class TestimonialController implements TestimonialApi {
 
     @Override
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest) {
 
         Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
