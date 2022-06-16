@@ -5,15 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SlideResponse {
-
+public class NewResponse {
     private Long id;
-    private String imageUrl;
-    private String text;
-    private Integer order;
-    private OrganizationResponse organization;
+
+    private String name;
+
+    private String content;
+
+    private String image;
+
+    private CategoryResponse category = null;
 }

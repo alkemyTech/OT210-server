@@ -14,19 +14,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.alkemy.ong.domain.model.Slide;
+import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.SLIDES_URI;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(SLIDES_URI)
-@RequiredArgsConstructor
 public class SlideController implements SlideApi {
 
-    private final SlideService service;
     private final SlideControllerMapper mapper;
+    private final SlideService slideService;
+
+    @GetMapping("/{id}")
+    @Override
+    public ResponseEntity<SlideResponse> getById(@PathVariable @NotNull Long id) {
+
+        Slide slide = slideService.getByIdIfExist(id);
+        SlideResponse slideResponse = mapper.slideToSlideResponse(slide);
+        return new ResponseEntity<>(slideResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSlide(@PathVariable @NotNull Long id){
+
+        slideService.deleteSlideByIdIfExist(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      
+    }
 
     @Override
     @GetMapping
@@ -36,7 +55,7 @@ public class SlideController implements SlideApi {
         final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
         final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
 
-        SlideList list = service.getList(PageRequest.of(pageNumber, pageSize));
+        SlideList list = slideService.getList(PageRequest.of(pageNumber, pageSize));
 
         SlideResponseList response;
         {
@@ -56,4 +75,5 @@ public class SlideController implements SlideApi {
         }
         return ResponseEntity.ok().body(response);
     }
+  
 }
