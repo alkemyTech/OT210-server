@@ -59,10 +59,14 @@ public class TestimonialController implements TestimonialApi {
     @Override
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest) {
+    public ResponseEntity<TestimonialResponse> updateTestimonial(@PathVariable Long id, @RequestBody @Valid TestimonialRequest testimonialRequest) {
 
         Testimonial testimonial = mapper.testimonialRequestToTestimonial(testimonialRequest);
+        Testimonial updated = service.updateIfExists(id, testimonial);
+        TestimonialResponse testimonialResponse = mapper.testimonialToTestimonialResopnse(updated);
+
         service.updateIfExists(id, testimonial);
+        return new ResponseEntity<>(testimonialResponse, HttpStatus.OK);
     }
 
     @Override

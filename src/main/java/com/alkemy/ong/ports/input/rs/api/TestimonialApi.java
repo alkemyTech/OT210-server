@@ -2,6 +2,7 @@ package com.alkemy.ong.ports.input.rs.api;
 
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
+import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -42,7 +43,9 @@ public interface TestimonialApi {
     ResponseEntity<Void> createTestimonial(@Valid CreateTestimonialRequest createTestimonialRequest);
 
     @Operation(summary = "Update Testimonial", description = "Update Testimonial", responses = {
-            @ApiResponse(responseCode = "204", description = "No Content"),
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = TestimonialResponse.class)))}),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = ErrorDetails.class)),
@@ -64,7 +67,7 @@ public interface TestimonialApi {
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\"," +
                                     "\"detail\":\"The resource with id 99 is not found\"}"))}),
     })
-    void updateTestimonial( Long id, @Valid TestimonialRequest testimonialRequest);
+    ResponseEntity<TestimonialResponse> updateTestimonial(Long id, @Valid TestimonialRequest testimonialRequest);
 
     @Operation(summary = "Delete Testimonial", description = "Delete Testimonial", responses = {
             @ApiResponse(responseCode = "204", description = "No Content"),
