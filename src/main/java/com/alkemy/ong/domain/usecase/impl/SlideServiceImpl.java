@@ -5,6 +5,8 @@ import com.alkemy.ong.domain.model.Slide;
 import com.alkemy.ong.domain.repository.SlideRepository;
 import com.alkemy.ong.domain.usecase.SlideService;
 
+import com.alkemy.ong.ports.input.rs.request.SlideRequest;
+import com.alkemy.ong.ports.output.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SlideServiceImpl implements SlideService {
 
     private final SlideRepository slideRepository;
+    private final S3Service s3Service;
+    private final String FILE_NAME = "";
 
     @Override
     @Transactional(readOnly = true)
@@ -28,5 +32,20 @@ public class SlideServiceImpl implements SlideService {
     public void deleteSlideByIdIfExist(Long id) {
         slideRepository.findById(id).ifPresent(slideRepository::delete);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void updateSlideIfExist(Long id , Slide slide) {
+
+        slideRepository.findById(id).map(slideJpa -> {
+            slideJpa.setImageUrl(s3Service.uploadFile(slide.getImageUrl(),FILE_NAME));
+            slideJpa.setOrder(slide.getOrder());
+            slideJpa.setOrganization(slide.getOrganization());
+
+            return slideRepository.save(slideJpa);
+        }).orElseThrow(() -> new NotFoundException(id));
+
+    }
+
 
 }
