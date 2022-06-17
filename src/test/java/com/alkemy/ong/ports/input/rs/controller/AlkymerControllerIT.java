@@ -132,10 +132,7 @@ class AlkymerControllerIT {
 
         mockMvc.perform(delete(ApiConstants.ALKYMERS_URI + "/1"))
                 .andExpect(status().isNoContent())
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andDo(print());
     }
 
     @Test

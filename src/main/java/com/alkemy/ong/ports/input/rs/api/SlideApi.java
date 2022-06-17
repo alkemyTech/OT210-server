@@ -13,15 +13,16 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Optional;
-
+import com.alkemy.ong.ports.input.rs.request.SlideRequest;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @SecurityRequirement(name = "bearerAuth")
 @Validated
 public interface SlideApi {
 
+    ResponseEntity<Void> createSlide(@Valid SlideRequest slideRequest);
     ResponseEntity<SlideResponse> getById(@NotNull Long id);
     ResponseEntity<Void> deleteSlide(@NotNull Long id);
 
