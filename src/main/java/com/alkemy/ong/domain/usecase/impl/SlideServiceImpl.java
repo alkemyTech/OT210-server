@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class SlideServiceImpl implements SlideService {
@@ -38,11 +39,9 @@ public class SlideServiceImpl implements SlideService {
         slideEntity.setOrganization(organization);
 
         Integer slideListMax = slideRepository.getMaxOrder();
-       if (order == null ||order <= slideListMax || order == 0){
-           slideEntity.setOrder(slideListMax + 1);
-       } else {
-           slideEntity.setOrder(order);
-       }
+        if (order == null && order <= slideListMax) {
+            slideEntity.setOrder(1 + slideListMax);
+        } else {slideEntity.setOrder(order);}
 
         String decodedImage = (s3Service.uploadFile(imgBase64, FILE_NAME));
         slideEntity.setImageUrl(decodedImage);
