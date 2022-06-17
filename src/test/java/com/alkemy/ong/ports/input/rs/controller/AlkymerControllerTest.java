@@ -104,6 +104,8 @@ class AlkymerControllerTest {
                 .getResponse()
                 .getContentAsString();
 
+        assertThat(content).isNotBlank();
+
         AlkymerResponse response = JsonUtils.jsonToObject(content, AlkymerResponse.class);
         assertThat(content).isNotBlank();
         assertThat(response.getId()).isEqualTo(99);
