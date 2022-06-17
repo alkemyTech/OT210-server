@@ -31,8 +31,10 @@ public class UserServiceImpl implements UserService {
     private final OrganizationService organizationService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Value("${default.organization.id}")
     private Long defaultOrganizationId;
+
     @Value("${default.role.id}")
     private Long defaultRoleId;
 
@@ -48,6 +50,37 @@ public class UserServiceImpl implements UserService {
     public UserList getList(PageRequest pageRequest) {
         Page<User> page = userJpaRepository.findAll(pageRequest);
         return new UserList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    @Override
+    @Transactional
+    public User updateUser(Long id, User entity) {
+
+        Optional<User> userOptional = userJpaRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User userToUpdate = new User();
+
+            if (entity.getFirstName() != null) {
+                userToUpdate.setFirstName(entity.getFirstName());
+            }
+            if (entity.getLastName() != null) {
+                userToUpdate.setLastName(entity.getLastName());
+            }
+            if (entity.getEmail() != null) {
+                userToUpdate.setEmail(entity.getEmail());
+            }
+            if (entity.getPassword() != null) {
+                userToUpdate.setPassword(passwordEncoder.encode(entity.getPassword()));
+            }
+            if (entity.getPhoto() != null) {
+                userToUpdate.setPhoto(entity.getPhoto());
+            }
+
+            userJpaRepository.save(userToUpdate);
+            return userToUpdate;
+        } else {
+            throw new NotFoundException(id);
+        }
     }
 
     @Override
