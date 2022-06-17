@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 
 public interface CommentService {
 
-    Long createEntity(Comment entity);
+    Long createEntity(Comment entity, Long newId);
     void deleteById(Long id);
     void updateEntityIfExists(Long id, Comment entity);
     CommentList getComments(PageRequest pageRequest);

@@ -46,7 +46,7 @@ public class Comment implements Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "new_id", referencedColumnName = "new_id", nullable = false)
     @ToString.Exclude
-    private New aNew;
+    private New new_;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
