@@ -9,9 +9,19 @@ import com.alkemy.ong.ports.input.rs.response.SlideResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.net.URI;
+
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.SLIDES_URI;
 
 
@@ -23,8 +33,8 @@ public class SlideController implements SlideApi {
     private final SlideControllerMapper mapper;
     private final SlideService slideService;
 
-    @GetMapping("/{id}")
     @Override
+    @GetMapping("/{id}")
     public ResponseEntity<SlideResponse> getById(@PathVariable @NotNull Long id) {
 
         Slide slide = slideService.getByIdIfExist(id);
@@ -32,9 +42,9 @@ public class SlideController implements SlideApi {
         return new ResponseEntity<>(slideResponse, HttpStatus.OK);
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSlide(@PathVariable @NotNull Long id) {
-
         slideService.deleteSlideByIdIfExist(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -43,10 +53,15 @@ public class SlideController implements SlideApi {
     @PostMapping
     public ResponseEntity<Void> createSlide(@RequestBody @Valid SlideRequest slideRequest) {
 
-        slideService.createSlide(slideRequest.getImg()
-                , slideRequest.getText(), slideRequest.getOrder(),
+        final long id = slideService.createSlide(slideRequest.getImg(),
+                slideRequest.getText(),
+                slideRequest.getOrder(),
                 slideRequest.getOrganizationId());
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(id)
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 }

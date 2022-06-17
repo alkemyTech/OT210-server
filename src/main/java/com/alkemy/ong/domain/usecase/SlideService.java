@@ -6,5 +6,5 @@ public interface SlideService {
 
     Slide getByIdIfExist(Long id);
     void deleteSlideByIdIfExist(Long id);
-    void createSlide(String imgBase64 , String text , Integer order, Long organizationId);
+    Long createSlide(String imgBase64 , String text , Integer order, Long organizationId);
 }
