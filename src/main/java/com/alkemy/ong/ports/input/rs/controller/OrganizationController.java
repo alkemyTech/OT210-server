@@ -1,6 +1,7 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.domain.model.Organization;
+import com.alkemy.ong.domain.model.Slide;
 import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.ports.input.rs.api.OrganizationApi;
 import com.alkemy.ong.ports.input.rs.mapper.OrganizationControllerMapper;
@@ -9,16 +10,12 @@ import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.ORGANIZATIONS_URI;
 
 @RestController
@@ -45,4 +42,12 @@ public class OrganizationController implements OrganizationApi {
         Organization organization  = mapper.updateOrganizationRequestToOrganization(updateOrganizationRequest);
         organizationService.updateEntityIfExists(id, organization);
     }
+
+
+    @GetMapping("/public/{id}/slides")
+    public ResponseEntity<List<Slide>> getSlides(@NotNull @PathVariable Long id) {
+        List<Slide> slides = organizationService.findSlides(id);
+        return ResponseEntity.ok().body(slides);
+    }
+
 }
