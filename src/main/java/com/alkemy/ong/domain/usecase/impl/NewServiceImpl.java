@@ -14,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,22 @@ public class NewServiceImpl implements NewService {
     @Transactional
     public void deleteById(Long id) {
     newJpaRepository.findById(id).ifPresent(newJpaRepository::delete);
+    }
+
+    @Override
+    @Transactional
+    public New updateNew(Long id, New entity) {
+        Optional<New> newOptional = newJpaRepository.findById(id);
+        if (newOptional.isPresent()) {
+            New newToUpdate = newOptional.get();
+            newToUpdate.setImage(entity.getImage());
+            newToUpdate.setName(entity.getName());
+            newToUpdate.setContent(entity.getContent());
+            return newJpaRepository.save(newToUpdate);
+        } else {
+            throw new NotFoundException(id);
+        }
+
     }
 
     private Category getCategoryIfExists(Long categoryId){

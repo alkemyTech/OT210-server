@@ -38,7 +38,7 @@ public class SlideServiceImpl implements SlideService {
         slideEntity.setOrganization(organization);
 
         Integer slideListMax = slideRepository.getMaxOrder();
-       if (order == null ||order <= slideListMax){
+       if (order == null ||order <= slideListMax || order == 0){
            slideEntity.setOrder(slideListMax + 1);
        } else {
            slideEntity.setOrder(order);

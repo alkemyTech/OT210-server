@@ -1,5 +1,6 @@
 package com.alkemy.ong.domain.usecase.impl;
 
+import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Member;
 import com.alkemy.ong.domain.model.MemberList;
 import com.alkemy.ong.domain.repository.MemberRepository;
@@ -25,6 +26,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
+    public void updateMember(Long id, Member entity) {
+
+        Optional<Member> optional = memberJpaRepository.findById(id);
+        if (optional.isPresent()) {
+            Member memberToUpdate = optional.get();
+            memberToUpdate.setName(entity.getName());
+            memberToUpdate.setImage(entity.getImage());
+            memberToUpdate.setDescription(entity.getDescription());
+            memberToUpdate.setFacebookUrl(entity.getFacebookUrl());
+            memberToUpdate.setInstagramUrl(entity.getInstagramUrl());
+            memberToUpdate.setLinkedinUrl(entity.getLinkedinUrl());
+            memberJpaRepository.save(memberToUpdate);
+        } else {
+            throw new NotFoundException(id);
+        }
+    }
+
     @Transactional(readOnly = true)
     public MemberList getList(PageRequest pageRequest) {
         Page<Member> page = memberJpaRepository.findAll(pageRequest);

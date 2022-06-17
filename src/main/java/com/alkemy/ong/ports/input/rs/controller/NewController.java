@@ -78,4 +78,13 @@ public class NewController implements NewApi {
         service.deleteById(id);
     }
 
+    @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<NewResponse> updateNew(@NotNull @PathVariable Long id, @Valid @RequestBody CreateNewRequest createNewRequest) {
+        New news = mapper.createNewRequestToNew(createNewRequest);
+        New newToUpdate = service.updateNew(id,news);
+        NewResponse response = mapper.newToNewResponse(newToUpdate);
+        return ResponseEntity.ok().body(response);
+    }
+
 }
