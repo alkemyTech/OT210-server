@@ -8,6 +8,8 @@ import com.alkemy.ong.domain.usecase.TestimonialService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.mapper.TestimonialControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
+import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
+import com.alkemy.ong.ports.input.rs.response.AlkymerResponseList;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponseList;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,11 +29,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static com.fasterxml.jackson.databind.util.ClassUtil.name;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,5 +116,31 @@ public class TestimonialControllerTest {
         assertThat(response.getPreviousUri()).isEqualTo("http://localhost/v1/testimonials?size=1&page=0");
         assertThat(response.getContent()).isNotEmpty();
 
+    }
+
+    @Test
+    void updateTestimonial_shouldReturn200() throws Exception {
+
+        TestimonialRequest update = TestimonialRequest.builder()
+                .name("Name UPDATED")
+                .content("Content UPDATED")
+                .image("Image UPDATED")
+                .build();
+
+        mockMvc.perform(put(ApiConstants.TESTIMONIALS_URI + "/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtils.objectToJson(update)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void deleteTestimonial_shouldReturn204() throws Exception {
+        mockMvc.perform(delete(ApiConstants.TESTIMONIALS_URI + "/1"))
+                .andExpect(status().isNoContent())
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
     }
 }
