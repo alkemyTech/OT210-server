@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -13,8 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Base64;
 import java.util.Date;
 
@@ -24,12 +27,13 @@ import java.util.Date;
 public class S3ServiceImpl implements S3Service {
 
     private final AmazonS3 amazonS3;
+
     @Value("${s3.bucket}")
     private String bucketName;
 
     @Override
     public String uploadFile(MultipartFile multipartFile) {
-        String fileUrl = "";
+        String fileUrl;
         try {
             File file = convertMultipartToFile(multipartFile);
             String fileName = generateFileName(file);
@@ -45,9 +49,7 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public String uploadFile(String fileBase64, String fileName) {
-
         MultipartFile multipartFile = decodeBase64ToMultipart(fileBase64,fileName);
-
         return uploadFile(multipartFile);
     }
 
@@ -101,5 +103,4 @@ public class S3ServiceImpl implements S3Service {
             throw new RuntimeException(e);
         }
     }
-
 }

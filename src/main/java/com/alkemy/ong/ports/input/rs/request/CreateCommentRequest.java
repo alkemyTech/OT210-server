@@ -1,6 +1,8 @@
 package com.alkemy.ong.ports.input.rs.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,16 +11,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SlideRequest {
+public class CreateCommentRequest {
 
     @NotBlank
-    private String img;
-    private String text;
-    @Positive
-    private Integer order;
+    @JsonProperty("body")
+    private String body;
+
     @NotNull
     @Positive
-    private Long organizationId;
+    @JsonProperty("new_id")
+    private Long newId;
+
 }
