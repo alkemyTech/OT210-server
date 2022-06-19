@@ -7,6 +7,7 @@ import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
 import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponseList;
+import lombok.With;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -100,7 +101,7 @@ public class TestimonialControllerIT {
     @Test
     @Order(4)
     @WithUserDetails("admin@somosmas.org")
-    void updateTestimonial_shouldReturn() throws Exception {
+    void updateTestimonial_shouldReturn200() throws Exception {
 
         TestimonialRequest update = TestimonialRequest.builder()
                 .name("Name UPDATED")
@@ -128,15 +129,32 @@ public class TestimonialControllerIT {
 
     @Test
     @Order(5)
+    @WithUserDetails("admin@somosmas.org")
+    void updateTestimonial_shouldReturn404() throws Exception{
+        TestimonialRequest update = TestimonialRequest.builder()
+                .name("Name UPDATED")
+                .content("Content UPDATED")
+                .image("Image UPDATED")
+                .build();
+
+        mockMvc.perform(put(ApiConstants.TESTIMONIALS_URI + "/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(update)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @Order(6)
     @WithUserDetails("jdoe@somosmas.org")
-    void deleteTestimonial_shouldReturn404() throws Exception {
+    void deleteTestimonial_shouldReturn403() throws Exception {
         mockMvc.perform(delete(ApiConstants.TESTIMONIALS_URI + "/1"))
                 .andExpect(status().isForbidden())
                 .andDo(print());
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     @WithUserDetails("admin@somosmas.org")
     void deleteTestimonial_shouldReturn204() throws Exception {
         mockMvc.perform(delete(ApiConstants.TESTIMONIALS_URI +"/1"))
