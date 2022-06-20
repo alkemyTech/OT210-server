@@ -6,7 +6,7 @@ import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.ports.input.rs.api.OrganizationApi;
 import com.alkemy.ong.ports.input.rs.mapper.OrganizationControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.UpdateOrganizationRequest;
-import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
+import com.alkemy.ong.ports.input.rs.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +45,12 @@ public class OrganizationController implements OrganizationApi {
 
     @Override
     @GetMapping("/public/{id}/slides")
-    public ResponseEntity<List<Slide>> getSlides(@NotNull @PathVariable Long id) {
-        List<Slide> slides = organizationService.getSlides(id);
-        return ResponseEntity.ok().body(slides);
+    public ResponseEntity<SlideResponseList> getSlides(@NotNull @PathVariable Long id) {
+        List<Slide> list = organizationService.getSlides(id);
+        SlideResponseList response = new SlideResponseList();
+        List<SlideResponse> content = mapper.slideListToSlideResponseList(list);
+        response.setContent(content);
+        return ResponseEntity.ok().body(response);
     }
+
 }
