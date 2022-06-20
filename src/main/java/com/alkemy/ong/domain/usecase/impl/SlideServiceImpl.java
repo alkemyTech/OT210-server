@@ -21,8 +21,8 @@ public class SlideServiceImpl implements SlideService {
     private final OrganizationRepository organizationRepository;
     private final S3ServiceImpl s3Service;
     private final SlideRepository slideRepository;
+    private final String FILE_NAME = "";
 
-    private final static String FILE_NAME = "Slide_image";
 
 
     @Override
@@ -69,5 +69,20 @@ public class SlideServiceImpl implements SlideService {
         Page<Slide> page = slideRepository.findAll(pageRequest);
         return new SlideList(page.getContent(), pageRequest, page.getTotalElements());
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void updateSlideIfExist(Long id , Slide slide) {
+
+        slideRepository.findById(id).map(slideJpa -> {
+            slideJpa.setImageUrl(s3Service.uploadFile(slide.getImageUrl(),FILE_NAME));
+            slideJpa.setOrder(slide.getOrder());
+            slideJpa.setOrganization(slide.getOrganization());
+
+            return slideRepository.save(slideJpa);
+        }).orElseThrow(() -> new NotFoundException(id));
+
+    }
+
 
 }
