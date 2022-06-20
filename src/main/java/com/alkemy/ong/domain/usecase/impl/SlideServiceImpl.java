@@ -21,7 +21,8 @@ public class SlideServiceImpl implements SlideService {
     private final OrganizationRepository organizationRepository;
     private final S3ServiceImpl s3Service;
     private final SlideRepository slideRepository;
-    private final String FILE_NAME = "";
+
+    private static final String FILE_NAME = "file_name";
 
 
 
@@ -71,11 +72,25 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public void updateSlideIfExist(Long id , Slide slide) {
+    @Transactional
+    public void updateSlideIfExist(Long id, String imgBase64, String text, Integer order, Long organizationId){
+
+        Slide slide = new Slide();
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new NotFoundException(organizationId));
+        slide.setOrganization(organization);
+
+        Integer maxOrder = slideRepository.getMaxOrder().orElse(0);
+        if (order == null || order <= maxOrder) {
+            slide.setOrder(++maxOrder);
+        } else {
+            slide.setOrder(order);
+        }
+
+        String url = s3Service.uploadFile(imgBase64, FILE_NAME);
 
         slideRepository.findById(id).map(slideJpa -> {
-            slideJpa.setImageUrl(s3Service.uploadFile(slide.getImageUrl(),FILE_NAME));
+            slideJpa.setImageUrl(url);
             slideJpa.setOrder(slide.getOrder());
             slideJpa.setOrganization(slide.getOrganization());
 

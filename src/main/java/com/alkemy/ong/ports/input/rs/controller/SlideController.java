@@ -1,7 +1,6 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.domain.model.Slide;
-import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.domain.model.SlideList;
 import com.alkemy.ong.domain.usecase.SlideService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
@@ -31,8 +30,6 @@ public class SlideController implements SlideApi {
 
     private final SlideControllerMapper mapper;
     private final SlideService slideService;
-    private final OrganizationService organizationService;
-
     @Override
     @GetMapping("/{id}")
     public ResponseEntity<SlideResponse> getById(@PathVariable @NotNull Long id) {
@@ -53,17 +50,13 @@ public class SlideController implements SlideApi {
 
     @PutMapping("/{id}")
     @Override
-    public ResponseEntity<Void> updateSlideIfExist (@PathVariable Long id, @RequestBody @Valid SlideRequest slideRequest ) {
+    public ResponseEntity<Void> updateSlideIfExist (@PathVariable @NotNull Long id, @RequestBody @Valid SlideRequest slideRequest ) {
 
-        Slide slide = new Slide();
-        slide.setImageUrl(slideRequest.getImg());
-        slide.setOrganization(organizationService.getByIdIfExists(slideRequest.getOrganizationId()));
-        slide.setOrder(slideRequest.getOrder());
-        slideService.updateSlideIfExist(id, slide);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
-
+        slideService.updateSlideIfExist(id, slideRequest.getImg(),
+                slideRequest.getText(),
+                slideRequest.getOrder(),
+                slideRequest.getOrganizationId());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override

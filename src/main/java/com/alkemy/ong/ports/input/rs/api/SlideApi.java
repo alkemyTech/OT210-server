@@ -25,7 +25,7 @@ public interface SlideApi {
     ResponseEntity<Void> createSlide(@Valid SlideRequest slideRequest);
     ResponseEntity<SlideResponse> getById(@NotNull Long id);
     ResponseEntity<Void> deleteSlide(@NotNull Long id);
-    ResponseEntity<Void> updateSlideIfExist(Long id , @Valid SlideRequest slideRequest);
+    ResponseEntity<Void> updateSlideIfExist(@NotNull Long id , @Valid SlideRequest slideRequest);
 
 
     @Operation(summary = "Get Slide List", description = "Get Slide List", responses = {

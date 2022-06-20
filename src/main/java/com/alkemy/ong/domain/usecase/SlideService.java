@@ -8,6 +8,6 @@ public interface SlideService {
     SlideList getList(PageRequest pageRequest);
     Slide getByIdIfExist(Long id);
     void deleteSlideByIdIfExist(Long id);
-    void updateSlideIfExist( Long id, Slide slide);
+    void updateSlideIfExist( Long id, String imgBase64, String text, Integer order, Long organizationId);
     Long createSlide(String imgBase64 , String text , Integer order, Long organizationId);
 }
