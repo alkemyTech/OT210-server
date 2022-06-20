@@ -7,7 +7,6 @@ import com.alkemy.ong.ports.input.rs.request.CreateTestimonialRequest;
 import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import com.alkemy.ong.ports.input.rs.response.TestimonialResponseList;
-import lombok.With;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -159,10 +158,7 @@ public class TestimonialControllerIT {
     void deleteTestimonial_shouldReturn204() throws Exception {
         mockMvc.perform(delete(ApiConstants.TESTIMONIALS_URI +"/1"))
                 .andExpect(status().isNoContent())
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andDo(print());
     }
 
 }
