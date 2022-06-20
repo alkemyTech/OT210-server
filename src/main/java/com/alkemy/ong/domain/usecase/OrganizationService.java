@@ -11,5 +11,5 @@ public interface OrganizationService {
 
     void updateEntityIfExists(Long id, Organization organization);
 
-    List<Slide> findSlides(Long id);
+    List<Slide> getSlides(Long id);
 }

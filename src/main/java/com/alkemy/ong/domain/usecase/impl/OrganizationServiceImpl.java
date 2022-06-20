@@ -46,8 +46,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Slide> findSlides(Long OrganizationId) {
-        Organization organization = organizationRepository.findById(OrganizationId).orElseThrow(() -> new NotFoundException(OrganizationId));
+    public List<Slide> getSlides(Long id) {
+        Organization organization = organizationRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         return organization.getSlides().stream()
                 .sorted(Comparator.comparing(Slide::getOrder))
                 .toList();

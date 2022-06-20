@@ -43,11 +43,10 @@ public class OrganizationController implements OrganizationApi {
         organizationService.updateEntityIfExists(id, organization);
     }
 
-
+    @Override
     @GetMapping("/public/{id}/slides")
     public ResponseEntity<List<Slide>> getSlides(@NotNull @PathVariable Long id) {
-        List<Slide> slides = organizationService.findSlides(id);
+        List<Slide> slides = organizationService.getSlides(id);
         return ResponseEntity.ok().body(slides);
     }
-
 }
