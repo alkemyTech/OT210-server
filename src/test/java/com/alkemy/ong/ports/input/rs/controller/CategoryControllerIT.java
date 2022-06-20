@@ -169,6 +169,44 @@ class CategoryControllerIT {
     @Test
     @Order(8)
     @WithAnonymousUser
+    void createCategory_shouldReturn401() throws Exception {
+
+        CreateCategoryRequest request = CreateCategoryRequest.builder()
+                .name("clases apoyo")
+                .description("clases para estudiantes sin recursos")
+                .image("fnofenefo")
+                .build();
+
+        mockMvc.perform(post(ApiConstants.CATEGORIES_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(request)))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(9)
+    @WithUserDetails("jdoe@somosmas.org")
+    void createCategory_shouldReturn403() throws Exception {
+
+        CreateCategoryRequest request = CreateCategoryRequest.builder()
+                .name("clases apoyo")
+                .description("clases para estudiantes sin recursos")
+                .image("fnofenefo")
+                .build();
+
+        mockMvc.perform(post(ApiConstants.CATEGORIES_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(request)))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(10)
+    @WithAnonymousUser
     void getCategory_shouldReturn401() throws Exception {
 
         mockMvc.perform(get(ApiConstants.CATEGORIES_URI + "/2"))
@@ -178,7 +216,7 @@ class CategoryControllerIT {
     }
 
     @Test
-    @Order(9)
+    @Order(11)
     @WithUserDetails("jdoe@somosmas.org")
     void getCategory_shouldReturn403() throws Exception {
 
@@ -189,12 +227,97 @@ class CategoryControllerIT {
     }
 
     @Test
-    @Order(10)
+    @Order(12)
     @WithUserDetails("admin@somosmas.org")
     void getCategory_shouldReturn404() throws Exception {
 
         mockMvc.perform(get(ApiConstants.CATEGORIES_URI + "/2"))
                 .andExpect(status().isNotFound())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(13)
+    @WithAnonymousUser
+    void getCategories_shouldReturn401() throws Exception {
+
+        mockMvc.perform(get(ApiConstants.CATEGORIES_URI))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+    }
+
+
+    @Test
+    @Order(14)
+    @WithAnonymousUser
+    void updateCategory_shouldReturn401() throws Exception {
+
+        CreateCategoryRequest request = CreateCategoryRequest.builder()
+                .name("clases apoyo")
+                .build();
+
+        mockMvc.perform(put(ApiConstants.CATEGORIES_URI + "2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(request)))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(15)
+    @WithUserDetails("jdoe@somosmas.org")
+    void updateCategory_shouldReturn403() throws Exception {
+
+        CreateCategoryRequest request = CreateCategoryRequest.builder()
+                .name("clases apoyo")
+                .build();
+
+        mockMvc.perform(put(ApiConstants.CATEGORIES_URI + "2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(request)))
+                .andExpect(status().isForbidden())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(16)
+    @WithUserDetails("admin@somosmas.org")
+    void updateCategory_shouldReturn404() throws Exception {
+
+        CreateCategoryRequest request = CreateCategoryRequest.builder()
+                .name("clases apoyo")
+                .build();
+
+        mockMvc.perform(put(ApiConstants.CATEGORIES_URI + "99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(request)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(17)
+    @WithAnonymousUser
+    void deleteCategory_shouldReturn401() throws Exception {
+
+        mockMvc.perform(delete(ApiConstants.CATEGORIES_URI + "/2"))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+
+    }
+
+    @Test
+    @Order(18)
+    @WithUserDetails("jdoe@somosmas.org")
+    void deleteCategory_shouldReturn4013() throws Exception {
+
+        mockMvc.perform(delete(ApiConstants.CATEGORIES_URI + "/2"))
+                .andExpect(status().isForbidden())
                 .andDo(print());
 
     }

@@ -42,15 +42,12 @@ class CategoryControllerTest {
 
     private MockMvc mockMvc;
 
-    //LE INYECTO MOCKS AL CONTROLLER PORQUE ES LA UNICA CLASE QUE DEBO PROBAR EN TEST UNITARIOS
     @InjectMocks
     CategoryController controller;
-    //A LAS OTRAS CLASES VINVULADAS EN EL CONTROLLER LA HAGO MOCK PARA QUE AL LLAMARLA SIEMPRE
-    //ME DEVUELVA NULO, O SEA NO DEVUELVE NADA
+
     @Mock
     CategoryService service;
-    // LA ANOTACION SPY SI LLEVA A CABO LA LOGICA NORMALMENTE Y PUEDE PONERSE COMO SPY PORQUE NO DEPENDE
-    // DE OTRA CLASE A DIFERENCIA DEL SERVICE
+
     @Spy
     CategoryControllerMapper mapper = Mappers.getMapper(CategoryControllerMapper.class);
 
@@ -130,8 +127,8 @@ class CategoryControllerTest {
         CategoryResponseList response = JsonUtils.jsonToObject(content, CategoryResponseList.class);
         assertThat(response.getTotalElements()).isEqualTo(1);
         assertThat(response.getTotalPages()).isEqualTo(1);
-        assertThat(response.getNextUri()).isEqualTo("http://localhost/v1/categories?page=1");
-        assertThat(response.getPreviousUri()).isEqualTo("http://localhost/v1/categories?page=0");
+        assertThat(response.getNextUri()).isEqualTo("http://localhost/v1/categories?size=1&page=1");
+        assertThat(response.getPreviousUri()).isEqualTo("http://localhost/v1/categories?size=1&page=0");
         assertThat(response.getContent()).isNotEmpty();
 
     }
