@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SlideResponse {
 
-     private String image;
-     private String text;
-     private Integer order;
-     private OrganizationResponse organization;
-
+    private Long id;
+    private String imageUrl;
+    private String text;
+    private Integer order;
+    private OrganizationResponse organization;
 }
