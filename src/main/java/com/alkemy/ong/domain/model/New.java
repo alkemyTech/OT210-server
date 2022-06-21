@@ -11,6 +11,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Getter
@@ -37,6 +38,11 @@ public class New implements Auditable  {
 
     @Column(nullable = false)
     private String image;
+
+    @OneToMany(mappedBy = "new_", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<Comment> comments;
+
 
     @Embedded
     private Audit audit;

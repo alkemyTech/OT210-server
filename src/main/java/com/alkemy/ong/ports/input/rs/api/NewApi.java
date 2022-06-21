@@ -1,6 +1,7 @@
 package com.alkemy.ong.ports.input.rs.api;
 
 import com.alkemy.ong.ports.input.rs.request.CreateNewRequest;
+import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import com.alkemy.ong.ports.input.rs.response.NewResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponseList;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +24,6 @@ public interface NewApi {
 
     ResponseEntity<NewResponse> updateNew(@NotNull @PathVariable("id") Long id,
                                           @Valid @RequestBody CreateNewRequest createNewRequest);
+
+    ResponseEntity<CommentResponseList> getCommentsFromNew(@NotNull Long idNew, Optional<Integer> page, Optional<Integer> size);
 }

@@ -2,6 +2,8 @@ package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Category;
+import com.alkemy.ong.domain.model.Comment;
+import com.alkemy.ong.domain.model.CommentList;
 import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.domain.model.NewList;
 import com.alkemy.ong.domain.repository.CategoryRepository;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -61,6 +64,20 @@ public class NewServiceImpl implements NewService {
             throw new NotFoundException(id);
         }
 
+    }
+
+    @Override
+    @Transactional
+    public New getNewById(Long id) {
+        return newJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    @Override
+    @Transactional
+    public CommentList getCommentsFromNew(Long id, PageRequest pageRequest) {
+        New aNew = newJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        List<Comment> list = aNew.getComments().stream().toList();
+        return new CommentList(list, pageRequest, list.size());
     }
 
     private Category getCategoryIfExists(Long categoryId){
