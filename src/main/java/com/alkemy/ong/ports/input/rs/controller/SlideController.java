@@ -50,6 +50,7 @@ public class SlideController implements SlideApi {
     }
 
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSlide(@PathVariable @NotNull Long id) {
 
@@ -57,8 +58,8 @@ public class SlideController implements SlideApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}")
     @Override
+    @PutMapping("/{id}")
     public ResponseEntity<Void> updateSlideIfExist(@PathVariable @NotNull Long id, @RequestBody @Valid SlideRequest slideRequest) {
 
         slideService.updateSlideIfExist(id,
@@ -115,4 +116,3 @@ public class SlideController implements SlideApi {
     }
 
 }
-

@@ -24,8 +24,6 @@ public class SlideServiceImpl implements SlideService {
 
     private static final String FILE_NAME = "file_name";
 
-
-
     @Override
     @Transactional
     public Long createSlide(String imgBase64, String text, Integer order, Long organizationId) {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,7 +50,7 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public String uploadFile(String fileBase64, String fileName) {
-        MultipartFile multipartFile = decodeBase64ToMultipart(fileBase64,fileName);
+        MultipartFile multipartFile = decodeBase64ToMultipart(fileBase64, fileName);
         return uploadFile(multipartFile);
     }
 
