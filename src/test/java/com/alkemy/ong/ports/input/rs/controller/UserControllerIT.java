@@ -20,7 +20,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,7 +52,7 @@ public class UserControllerIT {
 
         UserResponseList response = JsonUtils.jsonToObject(content, UserResponseList.class);
 
-        assertThat(response.getTotalElements()).isEqualTo(2);
+        assertThat(response.getTotalElements()).isEqualTo(3);
         assertThat(response.getTotalPages()).isEqualTo(1);
         assertThat(response.getNextUri()).isEqualTo("http://localhost/v1/users?page=1");
         assertThat(response.getPreviousUri()).isEqualTo("http://localhost/v1/users?page=0");
@@ -60,7 +62,7 @@ public class UserControllerIT {
     @Test
     @Order(2)
     @WithUserDetails("admin@somosmas.org")
-    void updateUser_shouldReturn204() throws Exception {
+    void updateUser_shouldReturn200() throws Exception {
 
         UpdateUserRequest request = UpdateUserRequest.builder()
                 .firstName("foo")
@@ -69,7 +71,7 @@ public class UserControllerIT {
         mockMvc.perform(patch(ApiConstants.USERS_URI + "/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(request)))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 
@@ -78,7 +80,7 @@ public class UserControllerIT {
     @WithUserDetails("admin@somosmas.org")
     void deleteUser_shouldReturn204() throws Exception {
 
-        mockMvc.perform(delete(ApiConstants.USERS_URI + "/1"))
+        mockMvc.perform(delete(ApiConstants.USERS_URI + "/3"))
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }

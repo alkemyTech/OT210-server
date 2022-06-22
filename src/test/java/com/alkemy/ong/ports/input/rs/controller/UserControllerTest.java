@@ -2,7 +2,9 @@ package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.common.exception.handler.GlobalExceptionHandler;
 import com.alkemy.ong.common.util.JsonUtils;
-import com.alkemy.ong.domain.model.*;
+import com.alkemy.ong.domain.model.Role;
+import com.alkemy.ong.domain.model.User;
+import com.alkemy.ong.domain.model.UserList;
 import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
@@ -27,8 +29,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,7 +93,7 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser_shouldReturn204() throws Exception {
+    void updateUser_shouldReturn200() throws Exception {
 
         UpdateUserRequest request = UpdateUserRequest.builder()
 
@@ -100,12 +103,10 @@ class UserControllerTest {
                 .photo("foo.png")
                 .build();
 
-        //given(service.updateUser(eq(99L), any(User.class))).willReturn();
-
         mockMvc.perform(patch(ApiConstants.USERS_URI + "/99")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(request)))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 
