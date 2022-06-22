@@ -4,6 +4,7 @@ import com.alkemy.ong.common.security.JwtUtils;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
+import com.alkemy.ong.ports.input.rs.api.AuthenticationApi;
 import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
 import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
@@ -35,7 +36,7 @@ import java.nio.file.AccessDeniedException;
 @RestController
 @RequestMapping(ApiConstants.AUTHENTICATION_URI)
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthenticationApi {
 
     private final UserControllerMapper userMapper;
     private final AuthenticationManager authenticationManager;
