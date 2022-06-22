@@ -6,11 +6,18 @@ import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.ports.input.rs.api.OrganizationApi;
 import com.alkemy.ong.ports.input.rs.mapper.OrganizationControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.UpdateOrganizationRequest;
-import com.alkemy.ong.ports.input.rs.response.*;
+import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
+import com.alkemy.ong.ports.input.rs.response.SlideResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -47,8 +54,7 @@ public class OrganizationController implements OrganizationApi {
     @GetMapping("/public/{id}/slides")
     public List<SlideResponse> getSlides(@NotNull @PathVariable Long id) {
         List<Slide> list = organizationService.getSlides(id);
-        List<SlideResponse> response = mapper.slideListToSlideResponseList(list);
-        return response;
+        return mapper.slideListToSlideResponseList(list);
     }
 
 }

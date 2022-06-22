@@ -20,6 +20,7 @@ public interface OrganizationControllerMapper extends CommonMapper{
 
     @IterableMapping(qualifiedByName = "slideToSlideResponse")
     List<SlideResponse> slideListToSlideResponseList(List<Slide> slides);
+
     @Named("slideToSlideResponse")
     SlideResponse slideToSlideResponse(Slide slide);
 }
