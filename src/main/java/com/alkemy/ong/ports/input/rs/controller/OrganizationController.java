@@ -47,9 +47,7 @@ public class OrganizationController implements OrganizationApi {
     @GetMapping("/public/{id}/slides")
     public List<SlideResponse> getSlides(@NotNull @PathVariable Long id) {
         List<Slide> list = organizationService.getSlides(id);
-       //SlideResponseList response = new SlideResponseList();
         List<SlideResponse> response = mapper.slideListToSlideResponseList(list);
-        //response.setContent(content);
         return response;
     }
 
