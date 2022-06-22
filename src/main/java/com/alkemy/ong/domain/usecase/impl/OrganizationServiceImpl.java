@@ -2,11 +2,15 @@ package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Organization;
+import com.alkemy.ong.domain.model.Slide;
 import com.alkemy.ong.domain.repository.OrganizationRepository;
 import com.alkemy.ong.domain.usecase.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
 
 
 @Service
@@ -39,4 +43,14 @@ public class OrganizationServiceImpl implements OrganizationService {
                     return organizationRepository.save(organizationJpa);
                 }).orElseThrow(() -> new NotFoundException(id));
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Slide> getSlides(Long id) {
+        Organization organization = organizationRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        return   organization.getSlides().stream()
+                .sorted(Comparator.comparing(Slide::getOrder))
+                .toList();
+    }
+
 }
