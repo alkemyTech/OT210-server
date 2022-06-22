@@ -1,6 +1,7 @@
 package com.alkemy.ong.ports.input.rs.api;
 
 import com.alkemy.ong.common.exception.error.ErrorDetails;
+import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.ports.input.rs.request.UpdateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.AlkymerResponseList;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +59,8 @@ public interface UserApi {
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with id 99 is not found\"}"))}),
     })
     ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
-                                            @Valid @RequestBody UpdateUserRequest updateUserRequest);
+                                            @Valid @RequestBody UpdateUserRequest updateUserRequest,
+                                            @AuthenticationPrincipal User user);
 
     @Operation(summary = "Delete  User", description = "Delete  User", responses = {
             @ApiResponse(responseCode = "204", description = "No Content"),

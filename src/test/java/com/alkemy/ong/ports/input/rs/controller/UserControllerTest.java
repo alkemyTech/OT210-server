@@ -98,7 +98,6 @@ class UserControllerTest {
         UpdateUserRequest request = UpdateUserRequest.builder()
 
                 .lastName("foo")
-                .email("foo@gmail.com")
                 .password("12345678")
                 .photo("foo.png")
                 .build();
