@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> userOptional = userJpaRepository.findById(id);
         if (userOptional.isPresent()) {
-            User userToUpdate = new User();
+            User userToUpdate = userOptional.get();
 
             if (entity.getFirstName() != null) {
                 userToUpdate.setFirstName(entity.getFirstName());
