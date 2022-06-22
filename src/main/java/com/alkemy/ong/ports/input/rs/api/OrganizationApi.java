@@ -3,6 +3,7 @@ package com.alkemy.ong.ports.input.rs.api;
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.request.UpdateOrganizationRequest;
 import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
+import com.alkemy.ong.ports.input.rs.response.SlideResponse;
 import com.alkemy.ong.ports.input.rs.response.SlideResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -48,5 +49,5 @@ public interface OrganizationApi {
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with id 99 is not found\"}"))}),
     })void updateOrganization(@NotNull Long id, @Valid UpdateOrganizationRequest updateOrganizationRequest);
 
-    ResponseEntity<SlideResponseList> getSlides(@NotNull @PathVariable Long id);
+    List<SlideResponse> getSlides(@NotNull @PathVariable Long id);
 }

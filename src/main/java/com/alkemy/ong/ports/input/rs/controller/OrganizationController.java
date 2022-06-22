@@ -45,12 +45,12 @@ public class OrganizationController implements OrganizationApi {
 
     @Override
     @GetMapping("/public/{id}/slides")
-    public ResponseEntity<SlideResponseList> getSlides(@NotNull @PathVariable Long id) {
+    public List<SlideResponse> getSlides(@NotNull @PathVariable Long id) {
         List<Slide> list = organizationService.getSlides(id);
-        SlideResponseList response = new SlideResponseList();
-        List<SlideResponse> content = mapper.slideListToSlideResponseList(list);
-        response.setContent(content);
-        return ResponseEntity.ok().body(response);
+       //SlideResponseList response = new SlideResponseList();
+        List<SlideResponse> response = mapper.slideListToSlideResponseList(list);
+        //response.setContent(content);
+        return response;
     }
 
 }
