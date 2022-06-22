@@ -21,4 +21,5 @@ public class SlideRequest {
     @NotNull
     @Positive
     private Long organizationId;
+
 }
