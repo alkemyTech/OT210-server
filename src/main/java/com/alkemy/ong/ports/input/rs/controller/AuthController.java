@@ -10,6 +10,8 @@ import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserAndAuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -40,7 +42,8 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-
+    @Parameter(name = "user", hidden = true)
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);
