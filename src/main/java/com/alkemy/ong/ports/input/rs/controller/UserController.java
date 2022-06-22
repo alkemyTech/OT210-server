@@ -73,14 +73,15 @@ public class UserController implements UserApi {
         return ResponseEntity.ok().body(response);
     }
 
+    @Override
     @SneakyThrows
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
                                                    @Valid @RequestBody UpdateUserRequest userRequest,
                                                    @AuthenticationPrincipal User user) {
 
-        boolean canUpdate = Objects.equals(user.getRole().getAuthority(), "ROLE_ADMIN") ||
-                Objects.equals(user.getId(), id);
+        boolean canUpdate = Objects.equals(user.getId(), id) ||
+                Objects.equals(user.getRole().getAuthority(), "ROLE_ADMIN");
         if (canUpdate) {
             User toEntity = mapper.updateUserRequestToUser(userRequest);
             User userToUpdate = service.updateUser(id, toEntity);

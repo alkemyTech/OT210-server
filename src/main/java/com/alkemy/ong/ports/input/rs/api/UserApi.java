@@ -7,6 +7,7 @@ import com.alkemy.ong.ports.input.rs.response.AlkymerResponseList;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponseList;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -58,6 +59,7 @@ public interface UserApi {
                             schema = @Schema(implementation = ErrorDetails.class),
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with id 99 is not found\"}"))}),
     })
+    @Parameter(name = "user", hidden = true)
     ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
                                             @Valid @RequestBody UpdateUserRequest updateUserRequest,
                                             @AuthenticationPrincipal User user);
