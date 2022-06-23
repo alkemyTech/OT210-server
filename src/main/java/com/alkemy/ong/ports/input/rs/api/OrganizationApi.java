@@ -3,6 +3,8 @@ package com.alkemy.ong.ports.input.rs.api;
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.request.UpdateOrganizationRequest;
 import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
+import com.alkemy.ong.ports.input.rs.response.SlideResponse;
+import com.alkemy.ong.ports.input.rs.response.SlideResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,9 +15,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 @SecurityRequirement(name = "bearerAuth")
@@ -45,4 +49,5 @@ public interface OrganizationApi {
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with id 99 is not found\"}"))}),
     })void updateOrganization(@NotNull Long id, @Valid UpdateOrganizationRequest updateOrganizationRequest);
 
+    List<SlideResponse> getSlides(@NotNull @PathVariable Long id);
 }

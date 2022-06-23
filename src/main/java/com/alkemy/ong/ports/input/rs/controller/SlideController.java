@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
+import com.alkemy.ong.domain.model.Slide;
 import com.alkemy.ong.domain.model.SlideList;
 import com.alkemy.ong.domain.usecase.SlideService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
@@ -10,24 +11,24 @@ import com.alkemy.ong.ports.input.rs.response.SlideResponse;
 import com.alkemy.ong.ports.input.rs.response.SlideResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.alkemy.ong.domain.model.Slide;
-import org.springframework.http.HttpStatus;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.SLIDES_URI;
 
@@ -48,10 +49,24 @@ public class SlideController implements SlideApi {
         return new ResponseEntity<>(slideResponse, HttpStatus.OK);
     }
 
+
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSlide(@PathVariable @NotNull Long id) {
+
         slideService.deleteSlideByIdIfExist(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateSlideIfExist(@PathVariable @NotNull Long id, @RequestBody @Valid SlideRequest slideRequest) {
+
+        slideService.updateSlideIfExist(id,
+                slideRequest.getImg(),
+                slideRequest.getText(),
+                slideRequest.getOrder(),
+                slideRequest.getOrganizationId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -99,5 +114,5 @@ public class SlideController implements SlideApi {
         }
         return ResponseEntity.ok().body(response);
     }
-  
+
 }

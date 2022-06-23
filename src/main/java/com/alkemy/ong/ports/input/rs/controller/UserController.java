@@ -10,9 +10,11 @@ import com.alkemy.ong.ports.input.rs.request.UpdateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponseList;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.USERS_URI;
@@ -70,14 +74,21 @@ public class UserController implements UserApi {
     }
 
     @Override
+    @SneakyThrows
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@NotNull @PathVariable("id") Long id,
-                                                   @Valid @RequestBody UpdateUserRequest userRequest) {
+                                                   @Valid @RequestBody UpdateUserRequest userRequest,
+                                                   @AuthenticationPrincipal User user) {
 
-        User toEntity = mapper.updateUserRequestToUser(userRequest);
-        User userToUpdate = service.updateUser(id, toEntity);
-        UserResponse userResponse = mapper.userToUserResponse(userToUpdate);
-        return ResponseEntity.ok().body(userResponse);
+        boolean canUpdate = Objects.equals(user.getId(), id) ||
+                Objects.equals(user.getRole().getAuthority(), "ROLE_ADMIN");
+        if (canUpdate) {
+            User toEntity = mapper.updateUserRequestToUser(userRequest);
+            User userToUpdate = service.updateUser(id, toEntity);
+            UserResponse userResponse = mapper.userToUserResponse(userToUpdate);
+            return ResponseEntity.ok().body(userResponse);
+        }
+        throw new AccessDeniedException("User not authorized to update this comment");
     }
 
     @DeleteMapping("/{id}")
