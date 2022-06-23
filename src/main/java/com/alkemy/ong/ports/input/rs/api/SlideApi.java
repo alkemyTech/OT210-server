@@ -1,5 +1,6 @@
 package com.alkemy.ong.ports.input.rs.api;
 
+import com.alkemy.ong.ports.input.rs.request.SlideRequest;
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.response.ContactResponseList;
 import com.alkemy.ong.ports.input.rs.response.SlideResponseList;
@@ -14,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import java.util.Optional;
-import com.alkemy.ong.ports.input.rs.request.SlideRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +25,8 @@ public interface SlideApi {
     ResponseEntity<Void> createSlide(@Valid SlideRequest slideRequest);
     ResponseEntity<SlideResponse> getById(@NotNull Long id);
     ResponseEntity<Void> deleteSlide(@NotNull Long id);
+    ResponseEntity<Void> updateSlideIfExist(@NotNull Long id , @Valid SlideRequest slideRequest);
+
 
     @Operation(summary = "Get Slide List", description = "Get Slide List", responses = {
             @ApiResponse(responseCode = "200", description = "OK",

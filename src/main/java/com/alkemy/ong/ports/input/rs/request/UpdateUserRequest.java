@@ -21,10 +21,6 @@ public class UpdateUserRequest {
     @JsonProperty("last_name")
     private String lastName;
 
-    @Email
-    @JsonProperty("email")
-    private String email;
-
     @Size(min = 8, max = 16)
     @JsonProperty("password")
     private String password;

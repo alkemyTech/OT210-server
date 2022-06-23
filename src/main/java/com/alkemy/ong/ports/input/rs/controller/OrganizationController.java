@@ -1,11 +1,13 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.domain.model.Organization;
+import com.alkemy.ong.domain.model.Slide;
 import com.alkemy.ong.domain.usecase.OrganizationService;
 import com.alkemy.ong.ports.input.rs.api.OrganizationApi;
 import com.alkemy.ong.ports.input.rs.mapper.OrganizationControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.UpdateOrganizationRequest;
 import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
+import com.alkemy.ong.ports.input.rs.response.SlideResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.ORGANIZATIONS_URI;
 
 @RestController
@@ -45,4 +49,12 @@ public class OrganizationController implements OrganizationApi {
         Organization organization  = mapper.updateOrganizationRequestToOrganization(updateOrganizationRequest);
         organizationService.updateEntityIfExists(id, organization);
     }
+
+    @Override
+    @GetMapping("/public/{id}/slides")
+    public List<SlideResponse> getSlides(@NotNull @PathVariable Long id) {
+        List<Slide> list = organizationService.getSlides(id);
+        return mapper.slideListToSlideResponseList(list);
+    }
+
 }
