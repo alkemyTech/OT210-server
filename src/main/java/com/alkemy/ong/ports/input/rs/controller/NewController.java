@@ -100,13 +100,13 @@ public class NewController implements NewApi {
     }
 
     @Override
-    @GetMapping("{id}/comments")
-    public ResponseEntity<CommentResponseList> getCommentsFromNew(@NotNull @PathVariable Long idNew, Optional<Integer> page, Optional<Integer> size) {
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<CommentResponseList> getCommentsFromNew(@NotNull @PathVariable Long id, Optional<Integer> page, Optional<Integer> size) {
 
         final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
         final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
 
-        CommentList commentList = service.getCommentsFromNew(idNew, PageRequest.of(pageNumber, pageSize));
+        CommentList commentList = service.getCommentsFromNew(id, PageRequest.of(pageNumber, pageSize));
         CommentResponseList response;
         {
             response = new CommentResponseList();
