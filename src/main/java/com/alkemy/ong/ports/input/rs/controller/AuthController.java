@@ -43,8 +43,6 @@ public class AuthController implements AuthenticationApi {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-    @Parameter(name = "user", hidden = true)
-    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);

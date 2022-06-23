@@ -8,6 +8,7 @@ import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserAndAuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 
-@SecurityRequirement(name = "bearerAuth")
+
 @Validated
 public interface AuthenticationApi {
 
@@ -30,7 +31,13 @@ public interface AuthenticationApi {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = UserResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorDetails.class),
+                            examples = @ExampleObject(value = "{\"code\":\"BAD_CREDENTIALS\",\"detail\":\"The server cannot return a response due to invalid credentials.\"}"))})
     })
+    @Parameter(name = "user", hidden = true)
+    @SecurityRequirement(name = "bearerAuth")
     ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user);
 
     @Operation(summary = "User Login", description ="User Login", responses = {
