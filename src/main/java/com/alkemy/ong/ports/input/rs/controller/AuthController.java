@@ -4,6 +4,7 @@ import com.alkemy.ong.common.security.JwtUtils;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.usecase.UserService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
+import com.alkemy.ong.ports.input.rs.api.AuthenticationApi;
 import com.alkemy.ong.ports.input.rs.mapper.UserControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.AuthenticationRequest;
 import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
@@ -33,22 +34,23 @@ import java.nio.file.AccessDeniedException;
 @RestController
 @RequestMapping(ApiConstants.AUTHENTICATION_URI)
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthenticationApi {
 
     private final UserControllerMapper userMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-
+    @Override
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
+    @Override
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
 
         AuthenticationResponse response =
                 prepareAuthenticationResponse(request.username(), request.password());
@@ -56,6 +58,7 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Override
     @PostMapping("/register")
     public ResponseEntity<UserAndAuthenticationResponse> registerNewUser(@Valid @RequestBody CreateUserRequest userRequest) {
 
