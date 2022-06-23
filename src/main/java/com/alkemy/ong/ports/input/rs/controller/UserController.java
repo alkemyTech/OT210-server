@@ -39,7 +39,6 @@ import static com.alkemy.ong.ports.input.rs.api.ApiConstants.USERS_URI;
 public class UserController implements UserApi {
 
     private final UserService service;
-
     private final UserControllerMapper mapper;
 
     @Override
@@ -88,9 +87,10 @@ public class UserController implements UserApi {
             UserResponse userResponse = mapper.userToUserResponse(userToUpdate);
             return ResponseEntity.ok().body(userResponse);
         }
-        throw new AccessDeniedException("User not authorized to update this comment");
+        throw new AccessDeniedException("User not authorized to update this resource");
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@NotNull @PathVariable Long id) {
         service.deleteUser(id);

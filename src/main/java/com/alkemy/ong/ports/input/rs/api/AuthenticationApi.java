@@ -27,6 +27,7 @@ import javax.validation.Valid;
 @Validated
 public interface AuthenticationApi {
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Get User Information", description = "Get User Information", responses ={
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -37,7 +38,6 @@ public interface AuthenticationApi {
                             examples = @ExampleObject(value = "{\"code\":\"BAD_CREDENTIALS\",\"detail\":\"The server cannot return a response due to invalid credentials.\"}"))})
     })
     @Parameter(name = "user", hidden = true)
-    @SecurityRequirement(name = "bearerAuth")
     ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user);
 
     @Operation(summary = "User Login", description ="User Login", responses = {
@@ -53,12 +53,12 @@ public interface AuthenticationApi {
                             schema = @Schema(implementation = ErrorDetails.class),
                             examples = @ExampleObject(value = "{\"code\":\"BAD_CREDENTIALS\",\"detail\":\"The server cannot return a response due to invalid credentials.\"}"))})
     })
-    ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request);
+    ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request);
 
     @Operation(summary = "Create User", description = "Create User", responses = {
             @ApiResponse(responseCode = "201" , description = "Created",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = UserResponse.class))}),
+                            schema = @Schema(implementation = UserAndAuthenticationResponse.class))}),
             @ApiResponse(responseCode = "409", description = "Conflict",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = ErrorDetails.class)),

@@ -11,8 +11,6 @@ import com.alkemy.ong.ports.input.rs.request.CreateUserRequest;
 import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserAndAuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -43,14 +41,16 @@ public class AuthController implements AuthenticationApi {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
+    @Override
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
+    @Override
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
 
         AuthenticationResponse response =
                 prepareAuthenticationResponse(request.username(), request.password());
@@ -58,6 +58,7 @@ public class AuthController implements AuthenticationApi {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Override
     @PostMapping("/register")
     public ResponseEntity<UserAndAuthenticationResponse> registerNewUser(@Valid @RequestBody CreateUserRequest userRequest) {
 
