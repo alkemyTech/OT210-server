@@ -2,8 +2,7 @@ package com.alkemy.ong.ports.input.rs.api;
 
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.request.CreateNewRequest;
-import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
-import com.alkemy.ong.ports.input.rs.response.AlkymerResponseList;
+import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponseList;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 
 @SecurityRequirement(name = "bearerAuth")
@@ -92,5 +92,5 @@ public interface NewApi {
     ResponseEntity<NewResponse> updateNew(@NotNull @PathVariable("id") Long id,
                                           @Valid @RequestBody CreateNewRequest createNewRequest);
 
-    ResponseEntity<CommentResponseList> getCommentsFromNew(@NotNull Long idNew, Optional<Integer> page, Optional<Integer> size);
+    ResponseEntity<List<CommentResponse>> getCommentsFromNew(@NotNull Long id);
 }

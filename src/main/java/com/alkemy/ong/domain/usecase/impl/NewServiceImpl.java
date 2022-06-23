@@ -3,7 +3,6 @@ package com.alkemy.ong.domain.usecase.impl;
 import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Category;
 import com.alkemy.ong.domain.model.Comment;
-import com.alkemy.ong.domain.model.CommentList;
 import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.domain.model.NewList;
 import com.alkemy.ong.domain.repository.CategoryRepository;
@@ -41,13 +40,13 @@ public class NewServiceImpl implements NewService {
     @Transactional(readOnly = true)
     public NewList getList(PageRequest pageRequest) {
         Page<New> page = newJpaRepository.findAll(pageRequest);
-        return new NewList(page.getContent(),pageRequest,page.getTotalElements());
+        return new NewList(page.getContent(), pageRequest, page.getTotalElements());
     }
 
     @Override
     @Transactional
     public void deleteById(Long id) {
-    newJpaRepository.findById(id).ifPresent(newJpaRepository::delete);
+        newJpaRepository.findById(id).ifPresent(newJpaRepository::delete);
     }
 
     @Override
@@ -67,21 +66,19 @@ public class NewServiceImpl implements NewService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public New getNewById(Long id) {
         return newJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     @Override
-    @Transactional
-    public CommentList getCommentsFromNew(Long id, PageRequest pageRequest) {
-        New aNew = newJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
-        List<Comment> list = aNew.getComments().stream().toList();
-        return new CommentList(list, pageRequest, list.size());
+    @Transactional(readOnly = true)
+    public List<Comment> getCommentsFromNew(Long id) {
+        return getNewById(id).getComments().stream().toList();
     }
 
-    private Category getCategoryIfExists(Long categoryId){
-        return  categoryJpaRepository.findById(categoryId)
+    private Category getCategoryIfExists(Long categoryId) {
+        return categoryJpaRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(categoryId));
     }
 }

@@ -1,6 +1,6 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
-import com.alkemy.ong.domain.model.CommentList;
+import com.alkemy.ong.domain.model.Comment;
 import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.domain.model.NewList;
 import com.alkemy.ong.domain.usecase.NewService;
@@ -10,7 +10,6 @@ import com.alkemy.ong.ports.input.rs.mapper.CommentControllerMapper;
 import com.alkemy.ong.ports.input.rs.mapper.NewControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateNewRequest;
 import com.alkemy.ong.ports.input.rs.response.CommentResponse;
-import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import com.alkemy.ong.ports.input.rs.response.NewResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponseList;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,7 @@ public class NewController implements NewApi {
 
     private final NewService service;
     private final NewControllerMapper mapper;
-    private final CommentControllerMapper commmentMapper;
+    private final CommentControllerMapper commentMapper;
 
     @Override
     @PostMapping
@@ -94,36 +93,17 @@ public class NewController implements NewApi {
     @PutMapping("/{id}")
     public ResponseEntity<NewResponse> updateNew(@NotNull @PathVariable Long id, @Valid @RequestBody CreateNewRequest createNewRequest) {
         New news = mapper.createNewRequestToNew(createNewRequest);
-        New newToUpdate = service.updateNew(id,news);
+        New newToUpdate = service.updateNew(id, news);
         NewResponse response = mapper.newToNewResponse(newToUpdate);
         return ResponseEntity.ok().body(response);
     }
 
     @Override
     @GetMapping("/{id}/comments")
-    public ResponseEntity<CommentResponseList> getCommentsFromNew(@NotNull @PathVariable Long id, Optional<Integer> page, Optional<Integer> size) {
-
-        final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
-        final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
-
-        CommentList commentList = service.getCommentsFromNew(id, PageRequest.of(pageNumber, pageSize));
-        CommentResponseList response;
-        {
-            response = new CommentResponseList();
-            List<CommentResponse> content = commmentMapper.commentListToCommentResponseList(commentList.getContent());
-            response.setContent(content);
-
-            final int nextPage = commentList.getPageable().next().getPageNumber();
-            response.setNextUri(ApiConstants.uriByPageAsString.apply(nextPage));
-
-            final int previousPage = commentList.getPageable().previousOrFirst().getPageNumber();
-            response.setPreviousUri(ApiConstants.uriByPageAsString.apply(previousPage));
-
-            response.setTotalPages(commentList.getTotalPages());
-            response.setTotalElements(commentList.getTotalElements());
-        }
+    public ResponseEntity<List<CommentResponse>> getCommentsFromNew(@NotNull @PathVariable Long id) {
+        List<Comment> comments = service.getCommentsFromNew(id);
+        List<CommentResponse> response = commentMapper.commentListToCommentResponseList(comments);
         return ResponseEntity.ok().body(response);
-
     }
 
 }
