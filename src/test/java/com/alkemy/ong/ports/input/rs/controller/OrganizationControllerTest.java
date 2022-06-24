@@ -57,19 +57,21 @@ class OrganizationControllerTest {
         organization.setAddress("Barrio La Cava");
         organization.setPhone(1160112988);
         organization.setEmail("somosmasong4@gmail.com");
-        organization.setWelcomeText("Trabajar articuladamente con los distintos aspectos de la vida de las familias, " +
-                "generando espacios de desarrollo personal y familiar, brindando herramientas que logren mejorar la " +
-                "calidad de vida a través de su propio esfuerzo.");
-        organization.setAboutUsText("Desde 1997 en Somos Más trabajamos con los chicos y chicas, mamás y papás, abuelos y vecinos " +
-                "del barrio La Cava generando procesos de crecimiento y de inserción social. Uniendo las manos de todas las familias," +
-                " las que viven en el barrio y las que viven fuera de él, es que podemos pensar, crear y garantizar estos procesos. " +
-                "Somos una asociación civil sin fines de lucro que se creó en 1997 con la intención de dar alimento a las familias " +
-                "del barrio. Con el tiempo fuimos involucrándonos con la comunidad y agrandando y mejorando nuestra capacidad de " +
-                "trabajo. Hoy somos un centro comunitario que acompaña a más de 700 personas a través de las áreas de: Educación, " +
-                "deportes, primera infancia, salud, alimentación y trabajo social.");
-        organization.setFacebookContact("http://facebook.com/SomosMas");
-        organization.setLinkedinContact("http://linkedIn.com/SomosMas");
-        organization.setInstagramContact("http://instagram.com/SomosMas");
+        organization.setWelcomeText("""
+                Trabajar articuladamente con los distintos aspectos de la vida de las familias,
+                generando espacios de desarrollo personal y familiar, brindando herramientas que logren mejorar la
+                calidad de vida a través de su propio esfuerzo.""");
+        organization.setAboutUsText("""
+                Desde 1997 en Somos Más trabajamos con los chicos y chicas, mamás y papás, abuelos y vecinos
+                del barrio La Cava generando procesos de crecimiento y de inserción social. Uniendo las manos de todas las familias,
+                las que viven en el barrio y las que viven fuera de él, es que podemos pensar, crear y garantizar estos procesos.
+                Somos una asociación civil sin fines de lucro que se creó en 1997 con la intención de dar alimento a las familias
+                del barrio. Con el tiempo fuimos involucrándonos con la comunidad y agrandando y mejorando nuestra capacidad de
+                trabajo. Hoy somos un centro comunitario que acompaña a más de 700 personas a través de las áreas de: Educación,
+                deportes, primera infancia, salud, alimentación y trabajo social.""");
+        organization.setFacebookContact("https://facebook.com/SomosMas");
+        organization.setLinkedinContact("https://linkedIn.com/SomosMas");
+        organization.setInstagramContact("https://instagram.com/SomosMas");
 
         given(service.getByIdIfExists(99L)).willReturn(organization);
 
@@ -90,21 +92,23 @@ class OrganizationControllerTest {
         assertThat(response.getAddress()).isEqualTo("Barrio La Cava");
         assertThat(response.getPhone()).isEqualTo(1160112988);
         assertThat(response.getEmail()).isEqualTo("somosmasong4@gmail.com");
-        assertThat(response.getFacebookContact()).isEqualTo("http://facebook.com/SomosMas");
-        assertThat(response.getLinkedinContact()).isEqualTo("http://linkedIn.com/SomosMas");
-        assertThat(response.getInstagramContact()).isEqualTo("http://instagram.com/SomosMas");
+        assertThat(response.getFacebookContact()).isEqualTo("https://facebook.com/SomosMas");
+        assertThat(response.getLinkedinContact()).isEqualTo("https://linkedIn.com/SomosMas");
+        assertThat(response.getInstagramContact()).isEqualTo("https://instagram.com/SomosMas");
     }
 
     @Test
     void updateOrganization_shouldReturn200() throws Exception {
         UpdateOrganizationRequest request = UpdateOrganizationRequest.builder()
-                .name("New Somos Más")
-                .image("New https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png\"")
-                .address("New Barrio La Cava")
+                .name("Updated Somos Más")
+                .image("https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS2.png")
+                .address("Updated Barrio La Cava")
                 .phone(123456789)
-                .welcomeText(" New Trabajar articuladamente con los distintos aspectos de la vida de las familias, generando espacios " +
-                        "de desarrollo personal y familiar, brindando herramientas que logren mejorar la calidad de vida a través" +
-                        " de su propio esfuerzo.")
+                .welcomeText("""
+                            Trabajar articuladamente con los distintos aspectos de la vida de las familias,
+                            generando espacios de desarrollo personal y familiar, brindando herramientas que
+                            logren mejorar la calidad de vida a través de su propio esfuerzo.
+                            """)
                 .build();
 
         mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1")

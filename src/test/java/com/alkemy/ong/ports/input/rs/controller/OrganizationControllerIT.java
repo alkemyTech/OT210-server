@@ -57,9 +57,6 @@ public class OrganizationControllerIT {
         assertThat(response.getAddress()).isEqualTo("Barrio La Cava");
         assertThat(response.getPhone()).isEqualTo(1160112988);
         assertThat(response.getEmail()).isEqualTo("somosmasong4@gmail.com");
-        //assertThat(response.getFacebookContact()).isEqualTo("http://facebook.com/SomosMás");
-        //assertThat(response.getLinkedinContact()).isEqualTo("http://linkedIn.com/SomosMás");
-        //assertThat(response.getInstagramContact()).isEqualTo("http://instagram.com/SomosMás");
     }
 
     @Test
@@ -68,13 +65,15 @@ public class OrganizationControllerIT {
     void updateOrganization_shouldReturn200() throws Exception {
 
         UpdateOrganizationRequest request = UpdateOrganizationRequest.builder()
-                .name("New Somos Más")
-                .image("New https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png\"")
-                .address("New Barrio La Cava")
+                .name("Updated Somos Más")
+                .image("https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS2.png")
+                .address("Updated Barrio La Cava")
                 .phone(123456789)
-                .welcomeText(" New Trabajar articuladamente con los distintos aspectos de la vida de las familias, generando espacios " +
-                        "de desarrollo personal y familiar, brindando herramientas que logren mejorar la calidad de vida a través" +
-                        " de su propio esfuerzo.")
+                .welcomeText("""
+                            Trabajar articuladamente con los distintos aspectos de la vida de las familias,
+                            generando espacios de desarrollo personal y familiar, brindando herramientas que
+                            logren mejorar la calidad de vida a través de su propio esfuerzo.
+                            """)
                 .build();
 
         mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1")

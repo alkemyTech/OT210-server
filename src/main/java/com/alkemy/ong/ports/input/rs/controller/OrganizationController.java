@@ -35,7 +35,7 @@ public class OrganizationController implements OrganizationApi {
 
 
     @Override
-    @GetMapping("/public/{id}")
+    @GetMapping(" {id}")
     public ResponseEntity<OrganizationResponse> getOrganization(@NotNull @PathVariable Long id) {
         Organization organization = organizationService.getByIdIfExists(id);
         OrganizationResponse organizationResponse = mapper.organizationToOrganizationResponse(organization);
