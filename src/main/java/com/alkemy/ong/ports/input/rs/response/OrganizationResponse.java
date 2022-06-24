@@ -12,11 +12,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrganizationResponse {
 
+    private Long id;
+
     private String name;
 
     private String image;
 
     private Integer phone;
+
+    private String email;
 
     private String address;
 
@@ -28,5 +32,4 @@ public class OrganizationResponse {
 
     @JsonProperty("instagram_contact")
     private String instagramContact;
-
 }
