@@ -9,7 +9,7 @@ public interface ApiConstants {
     String AUTHENTICATION_URI= "/auth";
     String ALKYMERS_URI = "/v1/alkymers";
     String USERS_URI = "/v1/users";
-    String ORGANIZATIONS_URI = "/v1/organizations";
+    String ORGANIZATIONS_URI = "/v1/organizations/public";
     String MEMBERS_URI = "/v1/members";
     String SLIDES_URI = "/v1/slides";
     String NEWS_URI = "/v1/news";

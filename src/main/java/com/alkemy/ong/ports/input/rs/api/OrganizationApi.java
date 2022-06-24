@@ -2,9 +2,9 @@ package com.alkemy.ong.ports.input.rs.api;
 
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.ports.input.rs.request.UpdateOrganizationRequest;
+import com.alkemy.ong.ports.input.rs.response.CategoryResponse;
 import com.alkemy.ong.ports.input.rs.response.OrganizationResponse;
 import com.alkemy.ong.ports.input.rs.response.SlideResponse;
-import com.alkemy.ong.ports.input.rs.response.SlideResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,10 +26,23 @@ import java.util.List;
 @Validated
 public interface OrganizationApi {
 
+    @Operation(summary = "Get Organization", description = "Get Organization", responses = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = CategoryResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorDetails.class),
+                            examples = @ExampleObject(value = "{\"code\":\"BAD_CREDENTIALS\",\"detail\":\"The server cannot return a response due to invalid credentials.\"}"))}),
+            @ApiResponse(responseCode = "404", description = "Not Found",
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorDetails.class),
+                            examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with this id is not found\"}"))}),
+    })
     ResponseEntity<OrganizationResponse> getOrganization(@NotNull Long id);
 
 
-    @Operation(summary = "update  Organization", description = "update  Organization", responses = {
+    @Operation(summary = "Update  Organization", description = "Update  Organization", responses = {
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -47,7 +60,8 @@ public interface OrganizationApi {
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorDetails.class),
                             examples = @ExampleObject(value = "{\"code\":\"RESOURCE_NOT_FOUND\",\"detail\":\"The resource with id 99 is not found\"}"))}),
-    })void updateOrganization(@NotNull Long id, @Valid UpdateOrganizationRequest updateOrganizationRequest);
+    })
+    void updateOrganization(@NotNull Long id, @Valid UpdateOrganizationRequest updateOrganizationRequest);
 
     List<SlideResponse> getSlides(@NotNull @PathVariable Long id);
 }

@@ -35,7 +35,7 @@ public class OrganizationController implements OrganizationApi {
 
 
     @Override
-    @GetMapping("/public/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<OrganizationResponse> getOrganization(@NotNull @PathVariable Long id) {
         Organization organization = organizationService.getByIdIfExists(id);
         OrganizationResponse organizationResponse = mapper.organizationToOrganizationResponse(organization);
@@ -43,7 +43,7 @@ public class OrganizationController implements OrganizationApi {
     }
 
     @Override
-    @PutMapping("/public/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateOrganization(@NotNull @PathVariable Long id, @Valid @RequestBody UpdateOrganizationRequest updateOrganizationRequest){
         Organization organization  = mapper.updateOrganizationRequestToOrganization(updateOrganizationRequest);
@@ -51,7 +51,7 @@ public class OrganizationController implements OrganizationApi {
     }
 
     @Override
-    @GetMapping("/public/{id}/slides")
+    @GetMapping("/{id}/slides")
     public List<SlideResponse> getSlides(@NotNull @PathVariable Long id) {
         List<Slide> list = organizationService.getSlides(id);
         return mapper.slideListToSlideResponseList(list);
