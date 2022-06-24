@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,21 +51,29 @@ class OrganizationControllerTest {
     void getOrganization_shouldReturn200() throws Exception {
 
         Organization organization = new Organization();
-        organization.setId(99L);
-        organization.setName("Name Organization");
-        organization.setImage("image_organization.jpg");
-        organization.setAddress("Organization address 123");
-        organization.setPhone(123456789);
-        organization.setEmail("organization@organization.com");
-        organization.setWelcomeText("Welcome Organization");
-        organization.setAboutUsText("About Organization");
-        organization.setFacebookContact("http://facebook.com/Organization");
-        organization.setLinkedinContact("http://linkedIn.com/Organization");
-        organization.setInstagramContact("http://instagram.com/Organization");
+        organization.setId(1L);
+        organization.setName("Somos Mas");
+        organization.setImage("https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png");
+        organization.setAddress("Barrio La Cava");
+        organization.setPhone(1160112988);
+        organization.setEmail("somosmasong4@gmail.com");
+        organization.setWelcomeText("Trabajar articuladamente con los distintos aspectos de la vida de las familias, " +
+                "generando espacios de desarrollo personal y familiar, brindando herramientas que logren mejorar la " +
+                "calidad de vida a través de su propio esfuerzo.");
+        organization.setAboutUsText("Desde 1997 en Somos Más trabajamos con los chicos y chicas, mamás y papás, abuelos y vecinos " +
+                "del barrio La Cava generando procesos de crecimiento y de inserción social. Uniendo las manos de todas las familias," +
+                " las que viven en el barrio y las que viven fuera de él, es que podemos pensar, crear y garantizar estos procesos. " +
+                "Somos una asociación civil sin fines de lucro que se creó en 1997 con la intención de dar alimento a las familias " +
+                "del barrio. Con el tiempo fuimos involucrándonos con la comunidad y agrandando y mejorando nuestra capacidad de " +
+                "trabajo. Hoy somos un centro comunitario que acompaña a más de 700 personas a través de las áreas de: Educación, " +
+                "deportes, primera infancia, salud, alimentación y trabajo social.");
+        organization.setFacebookContact("http://facebook.com/SomosMas");
+        organization.setLinkedinContact("http://linkedIn.com/SomosMas");
+        organization.setInstagramContact("http://instagram.com/SomosMas");
 
         given(service.getByIdIfExists(99L)).willReturn(organization);
 
-        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/99"))
+        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/public" + "/99"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn()
@@ -76,30 +84,33 @@ class OrganizationControllerTest {
 
         OrganizationResponse response = JsonUtils.jsonToObject(content, OrganizationResponse.class);
         assertThat(content).isNotBlank();
-        assertThat(response.getId()).isEqualTo(99);
-        assertThat(response.getName()).isEqualTo("Name Organization");
-        assertThat(response.getImage()).isEqualTo("image_organization.jpg");
-        assertThat(response.getAddress()).isEqualTo("Organization address 123");
-        assertThat(response.getPhone()).isEqualTo(123456789);
-        assertThat(response.getEmail()).isEqualTo("organization@organization.com");
-        assertThat(response.getFacebookContact()).isEqualTo("http://facebook.com/Organization");
-        assertThat(response.getLinkedinContact()).isEqualTo("http://linkedIn.com/Organization");
-        assertThat(response.getInstagramContact()).isEqualTo("http://instagram.com/Organization");
+        assertThat(response.getId()).isEqualTo(1);
+        assertThat(response.getName()).isEqualTo("Somos Mas");
+        assertThat(response.getImage()).isEqualTo("https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png");
+        assertThat(response.getAddress()).isEqualTo("Barrio La Cava");
+        assertThat(response.getPhone()).isEqualTo(1160112988);
+        assertThat(response.getEmail()).isEqualTo("somosmasong4@gmail.com");
+        assertThat(response.getFacebookContact()).isEqualTo("http://facebook.com/SomosMas");
+        assertThat(response.getLinkedinContact()).isEqualTo("http://linkedIn.com/SomosMas");
+        assertThat(response.getInstagramContact()).isEqualTo("http://instagram.com/SomosMas");
     }
 
     @Test
     void updateOrganization_shouldReturn200() throws Exception {
         UpdateOrganizationRequest request = UpdateOrganizationRequest.builder()
-                .name("Name Organization")
-                .image("image_organization.jpg")
-                .address("Organization address 123")
+                .name("New Somos Más")
+                .image("New https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png\"")
+                .address("New Barrio La Cava")
                 .phone(123456789)
+                .welcomeText(" New Trabajar articuladamente con los distintos aspectos de la vida de las familias, generando espacios " +
+                        "de desarrollo personal y familiar, brindando herramientas que logren mejorar la calidad de vida a través" +
+                        " de su propio esfuerzo.")
                 .build();
 
-        mockMvc.perform(patch(ApiConstants.ORGANIZATIONS_URI + "/99")
+        mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 }

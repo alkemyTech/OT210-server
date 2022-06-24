@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,7 +40,7 @@ public class OrganizationControllerIT {
     @WithUserDetails("admin@somosmas.org")
     void getOrganization_shouldReturn200() throws Exception {
 
-        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/1"))
+        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn()
@@ -51,15 +51,15 @@ public class OrganizationControllerIT {
 
         OrganizationResponse response = JsonUtils.jsonToObject(content, OrganizationResponse.class);
         assertThat(content).isNotBlank();
-        assertThat(response.getId()).isEqualTo(99);
-        assertThat(response.getName()).isEqualTo("Name Organization");
-        assertThat(response.getImage()).isEqualTo("image_organization.jpg");
-        assertThat(response.getAddress()).isEqualTo("Organization address 123");
-        assertThat(response.getPhone()).isEqualTo(123456789);
-        assertThat(response.getEmail()).isEqualTo("organization@organization.com");
-        assertThat(response.getFacebookContact()).isEqualTo("http://facebook.com/Organization");
-        assertThat(response.getLinkedinContact()).isEqualTo("http://linkedIn.com/Organization");
-        assertThat(response.getInstagramContact()).isEqualTo("http://instagram.com/Organization");
+        assertThat(response.getId()).isEqualTo(1);
+        assertThat(response.getName()).isEqualTo("Somos Mas");
+        assertThat(response.getImage()).isEqualTo("https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png");
+        assertThat(response.getAddress()).isEqualTo("Barrio La Cava");
+        assertThat(response.getPhone()).isEqualTo(1160112988);
+        assertThat(response.getEmail()).isEqualTo("somosmasong4@gmail.com");
+        //assertThat(response.getFacebookContact()).isEqualTo("http://facebook.com/SomosMás");
+        //assertThat(response.getLinkedinContact()).isEqualTo("http://linkedIn.com/SomosMás");
+        //assertThat(response.getInstagramContact()).isEqualTo("http://instagram.com/SomosMás");
     }
 
     @Test
@@ -68,16 +68,19 @@ public class OrganizationControllerIT {
     void updateOrganization_shouldReturn200() throws Exception {
 
         UpdateOrganizationRequest request = UpdateOrganizationRequest.builder()
-                .name("Name Organization")
-                .image("image_organization.jpg")
-                .address("Organization address 123")
+                .name("New Somos Más")
+                .image("New https://cohorte-abril-98a56bb4.s3.amazonaws.com/1653997314766-LOGO-SOMOS_MAS.png\"")
+                .address("New Barrio La Cava")
                 .phone(123456789)
+                .welcomeText(" New Trabajar articuladamente con los distintos aspectos de la vida de las familias, generando espacios " +
+                        "de desarrollo personal y familiar, brindando herramientas que logren mejorar la calidad de vida a través" +
+                        " de su propio esfuerzo.")
                 .build();
 
-        mockMvc.perform(patch(ApiConstants.ORGANIZATIONS_URI + "/1")
+        mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 
