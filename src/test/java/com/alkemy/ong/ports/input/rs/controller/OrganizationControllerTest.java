@@ -75,7 +75,7 @@ class OrganizationControllerTest {
 
         given(service.getByIdIfExists(99L)).willReturn(organization);
 
-        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/public" + "/99"))
+        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/99"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn()
@@ -111,7 +111,7 @@ class OrganizationControllerTest {
                             """)
                 .build();
 
-        mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1")
+        mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(request)))
                 .andExpect(status().isNoContent())

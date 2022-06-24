@@ -40,7 +40,7 @@ public class OrganizationControllerIT {
     @WithUserDetails("admin@somosmas.org")
     void getOrganization_shouldReturn200() throws Exception {
 
-        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1"))
+        String content = mockMvc.perform(get(ApiConstants.ORGANIZATIONS_URI + "/1"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn()
@@ -76,7 +76,7 @@ public class OrganizationControllerIT {
                             """)
                 .build();
 
-        mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/public" + "/1")
+        mockMvc.perform(put(ApiConstants.ORGANIZATIONS_URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(request)))
                 .andExpect(status().isNoContent())
