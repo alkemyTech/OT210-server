@@ -2,6 +2,7 @@ package com.alkemy.ong.domain.usecase.impl;
 
 import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Category;
+import com.alkemy.ong.domain.model.Comment;
 import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.domain.model.NewList;
 import com.alkemy.ong.domain.repository.CategoryRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -38,13 +40,13 @@ public class NewServiceImpl implements NewService {
     @Transactional(readOnly = true)
     public NewList getList(PageRequest pageRequest) {
         Page<New> page = newJpaRepository.findAll(pageRequest);
-        return new NewList(page.getContent(),pageRequest,page.getTotalElements());
+        return new NewList(page.getContent(), pageRequest, page.getTotalElements());
     }
 
     @Override
     @Transactional
     public void deleteById(Long id) {
-    newJpaRepository.findById(id).ifPresent(newJpaRepository::delete);
+        newJpaRepository.findById(id).ifPresent(newJpaRepository::delete);
     }
 
     @Override
@@ -63,8 +65,20 @@ public class NewServiceImpl implements NewService {
 
     }
 
-    private Category getCategoryIfExists(Long categoryId){
-        return  categoryJpaRepository.findById(categoryId)
+    @Override
+    @Transactional(readOnly = true)
+    public New getNewById(Long id) {
+        return newJpaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Comment> getCommentsFromNew(Long id) {
+        return getNewById(id).getComments().stream().toList();
+    }
+
+    private Category getCategoryIfExists(Long categoryId) {
+        return categoryJpaRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(categoryId));
     }
 }

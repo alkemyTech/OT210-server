@@ -1,24 +1,34 @@
 package com.alkemy.ong.ports.input.rs.controller;
 
+import com.alkemy.ong.domain.model.Comment;
 import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.domain.model.NewList;
 import com.alkemy.ong.domain.usecase.NewService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.NewApi;
+import com.alkemy.ong.ports.input.rs.mapper.CommentControllerMapper;
 import com.alkemy.ong.ports.input.rs.mapper.NewControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateNewRequest;
+import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +42,7 @@ public class NewController implements NewApi {
 
     private final NewService service;
     private final NewControllerMapper mapper;
+    private final CommentControllerMapper commentMapper;
 
     @Override
     @PostMapping
@@ -82,8 +93,16 @@ public class NewController implements NewApi {
     @PutMapping("/{id}")
     public ResponseEntity<NewResponse> updateNew(@NotNull @PathVariable Long id, @Valid @RequestBody CreateNewRequest createNewRequest) {
         New news = mapper.createNewRequestToNew(createNewRequest);
-        New newToUpdate = service.updateNew(id,news);
+        New newToUpdate = service.updateNew(id, news);
         NewResponse response = mapper.newToNewResponse(newToUpdate);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Override
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<List<CommentResponse>> getCommentsFromNew(@NotNull @PathVariable Long id) {
+        List<Comment> comments = service.getCommentsFromNew(id);
+        List<CommentResponse> response = commentMapper.commentListToCommentResponseList(comments);
         return ResponseEntity.ok().body(response);
     }
 
