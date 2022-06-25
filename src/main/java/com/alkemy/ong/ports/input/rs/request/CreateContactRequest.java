@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -20,6 +18,7 @@ public class CreateContactRequest {
     @NotBlank
     @JsonProperty("name")
     private String name;
+    @Email
     @NotBlank
     @JsonProperty("email")
     private String email;
