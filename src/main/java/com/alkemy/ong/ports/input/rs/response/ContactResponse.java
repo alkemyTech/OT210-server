@@ -19,8 +19,4 @@ public class ContactResponse {
     private String email;
     private String phone;
     private String message;
-    @DateTimeFormat(
-            iso = DateTimeFormat.ISO.DATE_TIME
-    )
-    private LocalDateTime deletedAt;
 }
