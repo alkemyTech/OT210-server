@@ -3,7 +3,6 @@ package com.alkemy.ong.ports.input.rs.api;
 import com.alkemy.ong.common.exception.error.ErrorDetails;
 import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.ports.input.rs.request.CreateCommentRequest;
-import com.alkemy.ong.ports.input.rs.response.AlkymerResponseList;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,7 +26,7 @@ public interface CommentApi {
     @Operation(summary = "Get Comments List", description = "Get Comments List", responses = {
             @ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = AlkymerResponseList.class))}),
+                            schema = @Schema(implementation = CommentResponseList.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorDetails.class),
