@@ -83,7 +83,7 @@ class ContactControllerTest {
     void getContacts_ShouldReturn200() throws Exception {
 
         Contact contact = new Contact();
-        contact.setId(2l);
+        contact.setId(2L);
         contact.setName("Jhonatan");
         contact.setEmail("Joestar@gmail.com");
         contact.setMessage("Hello Jhonatan Joestar");

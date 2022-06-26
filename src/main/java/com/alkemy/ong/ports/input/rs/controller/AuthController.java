@@ -41,7 +41,6 @@ public class AuthController implements AuthenticationApi {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-
     @Override
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUserInformation(@AuthenticationPrincipal User user) {

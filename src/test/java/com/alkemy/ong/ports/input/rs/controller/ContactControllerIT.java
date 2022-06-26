@@ -2,12 +2,9 @@ package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.H2Config;
 import com.alkemy.ong.common.util.JsonUtils;
-import com.alkemy.ong.domain.model.ContactList;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
-import com.alkemy.ong.ports.input.rs.request.CreateCategoryRequest;
 import com.alkemy.ong.ports.input.rs.request.CreateContactRequest;
 import com.alkemy.ong.ports.input.rs.response.ContactResponseList;
-import com.alkemy.ong.ports.input.rs.response.TestimonialResponseList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -42,8 +39,8 @@ public class ContactControllerIT {
 
     @Test
     @Order(1)
-    @WithUserDetails("admin@somosmas.org")
-    void createContact_shouldReturn201()throws Exception{
+    @WithAnonymousUser
+    void createContact_shouldReturn201() throws Exception {
 
         CreateContactRequest contactRequest = CreateContactRequest.builder()
                 .name("Luis")
@@ -53,8 +50,8 @@ public class ContactControllerIT {
                 .build();
 
         final String actualLocation = mockMvc.perform(post(ApiConstants.CONTACTS_URI)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtils.objectToJson(contactRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.objectToJson(contactRequest)))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andReturn()
@@ -78,7 +75,7 @@ public class ContactControllerIT {
 
         Assertions.assertThat(content).isNotBlank();
 
-        ContactResponseList response = JsonUtils.jsonToObject(content,ContactResponseList.class );
+        ContactResponseList response = JsonUtils.jsonToObject(content, ContactResponseList.class);
 
         Assertions.assertThat(response.getTotalElements()).isEqualTo(1);
         Assertions.assertThat(response.getTotalPages()).isEqualTo(1);
@@ -90,7 +87,7 @@ public class ContactControllerIT {
     @Test
     @Order(3)
     @WithAnonymousUser
-    void createContact_shouldReturn400()throws Exception{
+    void createContact_shouldReturn400() throws Exception {
 
         CreateContactRequest contactRequest = CreateContactRequest.builder()
                 .name("Luis")
@@ -99,23 +96,18 @@ public class ContactControllerIT {
                 .message("hello luis")
                 .build();
 
-        final String actualLocation = mockMvc.perform(post(ApiConstants.CONTACTS_URI)
+        mockMvc.perform(post(ApiConstants.CONTACTS_URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(contactRequest)))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getHeader(HttpHeaders.LOCATION);
+                .andDo(print());
     }
-
 
 
     @Test
     @Order(4)
     @WithAnonymousUser
     void getContacts_shouldReturn401() throws Exception {
-
         mockMvc.perform(get(ApiConstants.CONTACTS_URI))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
@@ -124,12 +116,12 @@ public class ContactControllerIT {
 
     @Test
     @Order(5)
-    @WithUserDetails("admin@somosmas.org")
-    void getContacts_shouldReturn404() throws Exception {
-
-        mockMvc.perform(get(ApiConstants.CONTACTS_URI + "/2"))
-                .andExpect(status().isNotFound())
+    @WithUserDetails("jdoe@somosmas.org")
+    void getContacts_shouldReturn403() throws Exception {
+        mockMvc.perform(get(ApiConstants.CONTACTS_URI))
+                .andExpect(status().isForbidden())
                 .andDo(print());
 
     }
+
 }
