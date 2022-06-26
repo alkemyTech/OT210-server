@@ -10,5 +10,4 @@ public interface CommentService {
     void deleteById(Long id);
     void updateEntityIfExists(Long id, Comment entity);
     CommentList getComments(PageRequest pageRequest);
-
 }
