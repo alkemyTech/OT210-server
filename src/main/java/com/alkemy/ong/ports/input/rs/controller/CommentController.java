@@ -8,6 +8,7 @@ import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.CommentApi;
 import com.alkemy.ong.ports.input.rs.mapper.CommentControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateCommentRequest;
+import com.alkemy.ong.ports.input.rs.request.UpdateCommentRequest;
 import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +37,7 @@ import static com.alkemy.ong.ports.input.rs.api.ApiConstants.COMMENTS_URI;
 @RequiredArgsConstructor
 public class CommentController implements CommentApi {
 
-    private final CommentService commentService;
+    private final CommentService service;
     private final CommentControllerMapper mapper;
 
     @Override
@@ -43,13 +46,20 @@ public class CommentController implements CommentApi {
                                               @AuthenticationPrincipal User user) {
 
         Comment comment = mapper.createCommentRequestToComment(request, user);
-        final long id = commentService.createEntity(comment, request.getNewId());
+        final long id = service.createEntity(comment, request.getNewId());
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(id)
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public void updateComment(@PathVariable Long id, @RequestBody @Valid UpdateCommentRequest commentRequest) {
+        Comment comment = mapper.updateCommentRequestToComment(commentRequest);
+        Comment updated = service.updateEntityIfExists(id, comment);
     }
 
     @GetMapping
@@ -59,7 +69,7 @@ public class CommentController implements CommentApi {
         final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
         final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
 
-        CommentList commentList = commentService.getComments(PageRequest.of(pageNumber, pageSize));
+        CommentList commentList = service.getComments(PageRequest.of(pageNumber, pageSize));
 
         CommentResponseList response;
         {

@@ -8,7 +8,7 @@ public interface CommentService {
 
     Long createEntity(Comment entity, Long newId);
     void deleteById(Long id);
-    void updateEntityIfExists(Long id, Comment entity);
+    Comment updateEntityIfExists(Long id, Comment entity);
     CommentList getComments(PageRequest pageRequest);
 
 }

@@ -39,12 +39,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void updateEntityIfExists(Long id, Comment comment) {
+    public Comment updateEntityIfExists(Long id, Comment comment) {
         commentRepository.findById(id)
                 .map(commentJpa -> {
                     Optional.ofNullable(comment.getBody()).ifPresent(commentJpa::setBody);
                     return commentRepository.save(commentJpa);
                 }).orElseThrow(() -> new NotFoundException(id));
+        return comment;
     }
 
     @Override
@@ -54,5 +55,4 @@ public class CommentServiceImpl implements CommentService {
                 Sort.by(Sort.Direction.DESC, "audit.createdAt")));
         return new CommentList(page.getContent(), pageRequest, page.getTotalElements());
     }
-
 }
