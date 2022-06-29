@@ -12,9 +12,12 @@ import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +38,7 @@ import static com.alkemy.ong.ports.input.rs.api.ApiConstants.COMMENTS_URI;
 @RequiredArgsConstructor
 public class CommentController implements CommentApi {
 
-    private final CommentService commentService;
+    private final CommentService service;
     private final CommentControllerMapper mapper;
 
     @Override
@@ -43,7 +47,7 @@ public class CommentController implements CommentApi {
                                               @AuthenticationPrincipal User user) {
 
         Comment comment = mapper.createCommentRequestToComment(request, user);
-        final long id = commentService.createEntity(comment, request.getNewId());
+        final long id = service.createEntity(comment, request.getNewId());
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(id)
@@ -59,7 +63,7 @@ public class CommentController implements CommentApi {
         final int pageNumber = page.filter(p -> p > 0).orElse(ApiConstants.DEFAULT_PAGE);
         final int pageSize = size.filter(s -> s > 0).orElse(ApiConstants.DEFAULT_PAGE_SIZE);
 
-        CommentList commentList = commentService.getComments(PageRequest.of(pageNumber, pageSize));
+        CommentList commentList = service.getComments(PageRequest.of(pageNumber, pageSize));
 
         CommentResponseList response;
         {
@@ -78,5 +82,13 @@ public class CommentController implements CommentApi {
             response.setTotalElements(commentList.getTotalElements());
         }
         return ResponseEntity.ok().body(response);
+    }
+
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComment(@NotNull @PathVariable Long id, @AuthenticationPrincipal User user) {
+        service.deleteById(id, user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

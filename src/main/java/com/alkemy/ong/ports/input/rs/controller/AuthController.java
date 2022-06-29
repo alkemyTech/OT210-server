@@ -12,9 +12,9 @@ import com.alkemy.ong.ports.input.rs.response.AuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserAndAuthenticationResponse;
 import com.alkemy.ong.ports.input.rs.response.UserResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.nio.file.AccessDeniedException;
 
 @RestController
 @RequestMapping(ApiConstants.AUTHENTICATION_URI)
@@ -82,7 +81,6 @@ public class AuthController implements AuthenticationApi {
 
     }
 
-    @SneakyThrows
     private AuthenticationResponse prepareAuthenticationResponse(
             String username, String password) {
 
