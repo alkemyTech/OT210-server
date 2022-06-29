@@ -21,6 +21,4 @@ public interface CommentControllerMapper extends CommonMapper {
     Comment createCommentRequestToComment(CreateCommentRequest request, User user);
 
     Comment updateCommentRequestToComment(UpdateCommentRequest commentRequest);
-
-    CommentResponse commentToCommentResponse(Comment updated);
 }

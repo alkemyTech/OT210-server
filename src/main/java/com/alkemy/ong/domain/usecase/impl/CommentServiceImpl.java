@@ -4,6 +4,7 @@ import com.alkemy.ong.common.exception.NotFoundException;
 import com.alkemy.ong.domain.model.Comment;
 import com.alkemy.ong.domain.model.CommentList;
 import com.alkemy.ong.domain.model.New;
+import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.domain.repository.CommentRepository;
 import com.alkemy.ong.domain.repository.NewRepository;
 import com.alkemy.ong.domain.usecase.CommentService;
@@ -11,10 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -33,19 +35,29 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteById(Long id) {
-        commentRepository.deleteById(id);
+    public void deleteById(Long id, User user) {
+
+        commentRepository.findById(id).ifPresent(comment -> {
+            if (isAuthorized(comment, user)) {
+                commentRepository.delete(comment);
+            } else {
+                throw new AccessDeniedException("User not authorized to delete this resource");
+            }
+        });
     }
 
     @Override
     @Transactional
-    public Comment updateEntityIfExists(Long id, Comment comment) {
-        commentRepository.findById(id)
-                .map(commentJpa -> {
-                    Optional.ofNullable(comment.getBody()).ifPresent(commentJpa::setBody);
-                    return commentRepository.save(commentJpa);
-                }).orElseThrow(() -> new NotFoundException(id));
-        return comment;
+    public void updateEntityIfExists(Long id, Long newId, Comment comment, User user) {
+        Comment toUpdate = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        if (isAuthorized(toUpdate, user)) {
+            New new_ = newRepository.findById(newId).orElseThrow(() -> new NotFoundException(newId));
+            toUpdate.setNew_(new_);
+            toUpdate.setBody(comment.getBody());
+            commentRepository.save(toUpdate);
+        } else {
+            throw new AccessDeniedException("User not authorized to update this resource");
+        }
     }
 
     @Override
@@ -54,5 +66,10 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> page = commentRepository.findAll(PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(),
                 Sort.by(Sort.Direction.DESC, "audit.createdAt")));
         return new CommentList(page.getContent(), pageRequest, page.getTotalElements());
+    }
+
+    private boolean isAuthorized(Comment comment, User user) {
+        return Objects.equals(user, comment.getUser()) ||
+                Objects.equals(user.getRole().getAuthority(), "ROLE_ADMIN");
     }
 }

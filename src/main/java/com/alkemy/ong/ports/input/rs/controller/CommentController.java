@@ -13,8 +13,10 @@ import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -57,9 +60,11 @@ public class CommentController implements CommentApi {
 
     @Override
     @PutMapping("/{id}")
-    public void updateComment(@PathVariable Long id, @RequestBody @Valid UpdateCommentRequest commentRequest) {
+    public void updateComment(@NotNull @PathVariable Long id,
+                              @RequestBody @Valid UpdateCommentRequest commentRequest,
+                              @AuthenticationPrincipal User user) {
         Comment comment = mapper.updateCommentRequestToComment(commentRequest);
-        Comment updated = service.updateEntityIfExists(id, comment);
+        service.updateEntityIfExists(id, commentRequest.getNewId(), comment, user);
     }
 
     @GetMapping
@@ -88,5 +93,13 @@ public class CommentController implements CommentApi {
             response.setTotalElements(commentList.getTotalElements());
         }
         return ResponseEntity.ok().body(response);
+    }
+
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComment(@NotNull @PathVariable Long id, @AuthenticationPrincipal User user) {
+        service.deleteById(id, user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
