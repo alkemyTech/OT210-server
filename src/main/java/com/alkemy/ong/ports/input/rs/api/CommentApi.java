@@ -5,11 +5,13 @@ import com.alkemy.ong.domain.model.User;
 import com.alkemy.ong.ports.input.rs.request.CreateCommentRequest;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,8 +21,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
-
 @Validated
+@SecurityRequirement(name = "bearerAuth")
 public interface CommentApi {
 
     @Operation(summary = "Get Comments List", description = "Get Comments List", responses = {
@@ -66,5 +68,6 @@ public interface CommentApi {
                             schema = @Schema(implementation = ErrorDetails.class),
                             examples = @ExampleObject(value = "{\"code\":\"ROLE_INVALID\",\"detail\":\"The user does not have access to the current resource\"}"))}),
     })
-    ResponseEntity<Void> deleteComment(@NotNull Long id);
+    @Parameter(name = "user", hidden = true)
+    ResponseEntity<Void> deleteComment(@NotNull Long id, @AuthenticationPrincipal User user);
 }
