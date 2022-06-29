@@ -61,9 +61,7 @@ public interface CommentApi {
 
 
     @Operation(summary = "Update Comment", description = "Update Comment", responses = {
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = CommentResponse.class)))}),
+            @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "400", description = "Bad Request",
                     content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = ErrorDetails.class)),
@@ -100,6 +98,6 @@ public interface CommentApi {
                             examples = @ExampleObject(value = "{\"code\":\"ROLE_INVALID\",\"detail\":\"The user does not have access to the current resource\"}"))}),
     })
     @Parameter(name = "user", hidden = true)
-    ResponseEntity<Void> deleteComment(@NotNull Long id, @AuthenticationPrincipal User user);
+    void deleteComment(@NotNull Long id, @AuthenticationPrincipal User user);
 }
 
