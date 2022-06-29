@@ -11,7 +11,6 @@ import com.alkemy.ong.ports.input.rs.request.CreateCommentRequest;
 import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.alkemy.ong.ports.input.rs.api.ApiConstants.COMMENTS_URI;
