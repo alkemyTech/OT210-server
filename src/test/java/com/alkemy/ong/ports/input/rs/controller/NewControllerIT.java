@@ -2,14 +2,10 @@ package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.H2Config;
 import com.alkemy.ong.common.util.JsonUtils;
-import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.request.CreateNewRequest;
-import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
-import com.alkemy.ong.ports.input.rs.response.AlkymerResponseList;
 import com.alkemy.ong.ports.input.rs.response.NewResponse;
 import com.alkemy.ong.ports.input.rs.response.NewResponseList;
-import com.alkemy.ong.ports.input.rs.response.TestimonialResponse;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -25,9 +21,10 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,7 +57,7 @@ class NewControllerIT {
                 .getResponse()
                 .getHeader(HttpHeaders.LOCATION);
 
-        assertThat(actualLocation).isEqualTo("http://localhost/v1/new/99");
+        assertThat(actualLocation).isEqualTo("http://localhost/v1/news/1");
     }
 
     @Test
@@ -97,7 +94,7 @@ class NewControllerIT {
                 .image("Image UPDATED")
                 .build();
 
-        String content = mockMvc.perform(put(ApiConstants.NEWS_URI + "/99")
+        String content = mockMvc.perform(put(ApiConstants.NEWS_URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.objectToJson(update)))
                 .andExpect(status().isOk())
@@ -123,14 +120,14 @@ class NewControllerIT {
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
+
     @Test
     @Order(5)
     @WithUserDetails("jdoe@somosmas.org")
     void deleteNew_shouldReturn403() throws Exception {
         mockMvc.perform(delete(ApiConstants.NEWS_URI + "/1"))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isForbidden())
                 .andDo(print());
     }
-
 
 }

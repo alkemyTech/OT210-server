@@ -2,15 +2,13 @@ package com.alkemy.ong.ports.input.rs.controller;
 
 import com.alkemy.ong.common.exception.handler.GlobalExceptionHandler;
 import com.alkemy.ong.common.util.JsonUtils;
-import com.alkemy.ong.domain.model.Alkymer;
 import com.alkemy.ong.domain.model.New;
 import com.alkemy.ong.domain.model.NewList;
 import com.alkemy.ong.domain.usecase.NewService;
 import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.mapper.NewControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateNewRequest;
-import com.alkemy.ong.ports.input.rs.request.TestimonialRequest;
-import com.alkemy.ong.ports.input.rs.response.ContactResponseList;
+import com.alkemy.ong.ports.input.rs.response.NewResponseList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +27,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,12 +58,13 @@ class NewControllerTest {
     }
 
     @Test
-    void createNew_shouldReturn201() throws Exception{
+    void createNew_shouldReturn201() throws Exception {
         CreateNewRequest request = CreateNewRequest.builder()
                 .name("noticia")
                 .content("contenido")
                 .image("image.png")
                 .build();
+
         given(service.createNew(any(New.class))).willReturn(99L);
 
         final String actualLocation = mockMvc.perform(post(ApiConstants.NEWS_URI)
@@ -75,7 +76,7 @@ class NewControllerTest {
                 .getResponse()
                 .getHeader(HttpHeaders.LOCATION);
 
-        assertThat(actualLocation).isEqualTo("http://localhost/v1/new/99");
+        assertThat(actualLocation).isEqualTo("http://localhost/v1/news/99");
     }
 
     @Test
@@ -98,7 +99,7 @@ class NewControllerTest {
 
         assertThat(content).isNotBlank();
 
-        ContactResponseList response = JsonUtils.jsonToObject(content, ContactResponseList.class);
+        NewResponseList response = JsonUtils.jsonToObject(content, NewResponseList.class);
 
         assertThat(response.getTotalElements()).isEqualTo(1);
         assertThat(response.getTotalPages()).isEqualTo(1);
@@ -132,7 +133,6 @@ class NewControllerTest {
                 .getResponse()
                 .getContentAsString();
     }
-
 
 
 }
