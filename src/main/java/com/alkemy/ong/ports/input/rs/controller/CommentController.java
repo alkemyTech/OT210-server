@@ -8,6 +8,7 @@ import com.alkemy.ong.ports.input.rs.api.ApiConstants;
 import com.alkemy.ong.ports.input.rs.api.CommentApi;
 import com.alkemy.ong.ports.input.rs.mapper.CommentControllerMapper;
 import com.alkemy.ong.ports.input.rs.request.CreateCommentRequest;
+import com.alkemy.ong.ports.input.rs.request.UpdateCommentRequest;
 import com.alkemy.ong.ports.input.rs.response.CommentResponse;
 import com.alkemy.ong.ports.input.rs.response.CommentResponseList;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -56,6 +59,17 @@ public class CommentController implements CommentApi {
         return ResponseEntity.created(location).build();
     }
 
+    @Override
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateComment(@NotNull @PathVariable Long id,
+                              @RequestBody @Valid UpdateCommentRequest commentRequest,
+                              @AuthenticationPrincipal User user) {
+        Comment comment = mapper.updateCommentRequestToComment(commentRequest);
+        service.updateEntityIfExists(id, commentRequest.getNewId(), comment, user);
+    }
+
+    @Override
     @GetMapping
     public ResponseEntity<CommentResponseList> getComments(@RequestParam Optional<Integer> page,
                                                            @RequestParam Optional<Integer> size) {
@@ -87,8 +101,8 @@ public class CommentController implements CommentApi {
 
     @Override
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@NotNull @PathVariable Long id, @AuthenticationPrincipal User user) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(@NotNull @PathVariable Long id, @AuthenticationPrincipal User user) {
         service.deleteById(id, user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -14,7 +14,7 @@ import javax.validation.constraints.Positive;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCommentRequest {
+public class UpdateCommentRequest {
 
     @NotBlank
     @JsonProperty("body")

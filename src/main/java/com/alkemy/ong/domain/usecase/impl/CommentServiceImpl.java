@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,28 +36,28 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void deleteById(Long id, User user) {
-        Optional<Comment> optional = commentRepository.findById(id);
-        if (optional.isPresent()) {
-            Comment comment = optional.get();
 
-            boolean canDelete = Objects.equals(user, comment.getUser()) ||
-                    Objects.equals(user.getRole().getAuthority(), "ROLE_ADMIN");
-
-            if (!canDelete) {
+        commentRepository.findById(id).ifPresent(comment -> {
+            if (isAuthorized(comment, user)) {
+                commentRepository.delete(comment);
+            } else {
                 throw new AccessDeniedException("User not authorized to delete this resource");
             }
-            commentRepository.delete(comment);
-        }
+        });
     }
 
     @Override
     @Transactional
-    public void updateEntityIfExists(Long id, Comment comment) {
-        commentRepository.findById(id)
-                .map(commentJpa -> {
-                    Optional.ofNullable(comment.getBody()).ifPresent(commentJpa::setBody);
-                    return commentRepository.save(commentJpa);
-                }).orElseThrow(() -> new NotFoundException(id));
+    public void updateEntityIfExists(Long id, Long newId, Comment comment, User user) {
+        Comment toUpdate = commentRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        if (isAuthorized(toUpdate, user)) {
+            New new_ = newRepository.findById(newId).orElseThrow(() -> new NotFoundException(newId));
+            toUpdate.setNew_(new_);
+            toUpdate.setBody(comment.getBody());
+            commentRepository.save(toUpdate);
+        } else {
+            throw new AccessDeniedException("User not authorized to update this resource");
+        }
     }
 
     @Override
@@ -69,4 +68,8 @@ public class CommentServiceImpl implements CommentService {
         return new CommentList(page.getContent(), pageRequest, page.getTotalElements());
     }
 
+    private boolean isAuthorized(Comment comment, User user) {
+        return Objects.equals(user, comment.getUser()) ||
+                Objects.equals(user.getRole().getAuthority(), "ROLE_ADMIN");
+    }
 }
