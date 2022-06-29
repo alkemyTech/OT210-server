@@ -128,10 +128,7 @@ class NewControllerTest {
 
         mockMvc.perform(delete(ApiConstants.NEWS_URI + "/1"))
                 .andExpect(status().isNoContent())
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andDo(print());
     }
 
 
