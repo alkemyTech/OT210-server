@@ -9,14 +9,13 @@ import com.alkemy.ong.domain.repository.CommentRepository;
 import com.alkemy.ong.domain.repository.NewRepository;
 import com.alkemy.ong.domain.usecase.CommentService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,7 +35,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @SneakyThrows
     @Transactional
     public void deleteById(Long id, User user) {
         Optional<Comment> optional = commentRepository.findById(id);
